@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E207 소셜 로그인 테스트</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px; margin: 32px auto; padding: 0 16px; }
+    code, pre { background: #f6f8fa; padding: 2px 6px; border-radius: 4px; }
+    pre { padding: 12px; overflow: auto; }
+    button { margin-right: 8px; margin-bottom: 8px; padding: 10px 12px; cursor: pointer; }
+    .hint { color: #555; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; background: #fff; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    input[type=text] { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+    textarea { width: 100%; min-height: 110px; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .label { font-weight: 600; margin-bottom: 6px; display: block; }
+    .small { font-size: 12px; color: #6b7280; }
+    .token { word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>소셜 로그인 테스트 페이지</h1>
+  <p class="hint">프론트 없이도 OAuth 로그인 플로우를 브라우저에서 태울 수 있게 만든 테스트 페이지입니다.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>1) 로그인 시작</h2>
+      <p class="row">
+        <button onclick="location.href='/oauth2/authorization/KAKAO'">Kakao 시작</button>
+        <button onclick="location.href='/oauth2/authorization/NAVER'">Naver 시작</button>
+        <button onclick="location.href='/oauth2/authorization/GOOGLE'">Google 시작</button>
+        <button onclick="clearLocal()">결과 초기화</button>
+      </p>
+      <p class="small">로그인 후 콜백 API가 JSON을 응답합니다. 이 페이지는 마지막 결과를 로컬에 저장해 토큰을 표시합니다.</p>
+    </div>
+
+    <div class="card">
+      <h2>2) 토큰/결과 표시</h2>
+      <p class="hint">주의: refreshToken은 실제로 <b>HttpOnly Cookie</b>로 내려가면 JS로 읽을 수 없습니다. 이 페이지의 <code>refreshToken</code> 표시는 <b>쿠키가 HttpOnly=false</b>인 개발 환경에서만 가능합니다.</p>
+
+      <div class="row" style="margin-bottom: 8px;">
+        <button onclick="loadFromStorage()">저장된 결과 불러오기</button>
+        <button onclick="fetchRefresh()">/auth/refresh 호출(쿠키 사용)</button>
+      </div>
+
+      <div>
+        <span class="label">Access Token</span>
+        <textarea id="accessToken" class="token" readonly></textarea>
+      </div>
+
+      <div>
+        <span class="label">Refresh Token (cookie)</span>
+        <textarea id="refreshToken" class="token" readonly></textarea>
+        <div class="small">브라우저에서 Set-Cookie로 저장된 값을 JS로 읽으려면 HttpOnly가 false여야 합니다.</div>
+      </div>
+
+      <div>
+        <span class="label">Register Token (회원가입 필요 시)</span>
+        <textarea id="registerToken" class="token" readonly></textarea>
+      </div>
+
+      <div>
+        <span class="label">마지막 응답(JSON)</span>
+        <textarea id="lastResponse" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3) 회원가입 테스트 (/auth/regist)</h2>
+      <p class="small">2)에서 내려온 registerToken으로 회원가입을 수행합니다.</p>
+      <div class="row" style="width: 100%;">
+        <div style="flex: 1 1 260px;">
+          <span class="label">nickname</span>
+          <input id="nickname" type="text" placeholder="닉네임 입력 (중복 불가)" />
+        </div>
+        <div style="flex: 1 1 260px;">
+          <span class="label">profileImage (URL)</span>
+          <input id="profileImage" type="text" placeholder="https://... (선택)" />
+          <div class="small">S3 업로드 후 URL을 넣어주세요(선택).</div>
+        </div>
+        <div style="flex: 1 1 160px;">
+          <span class="label">isMarketing</span>
+          <input id="isMarketing" type="text" value="false" />
+          <div class="small">true/false</div>
+        </div>
+      </div>
+      <p class="row">
+        <button onclick="signUp()">회원가입 요청 보내기</button>
+      </p>
+      <div>
+        <span class="label">회원가입 응답(JSON)</span>
+        <textarea id="signUpResponse" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>설정 참고</h2>
+      <ul>
+        <li>각 소셜 콘솔에 <code>redirect_uri</code>로 아래 URL을 등록해야 합니다.</li>
+        <li>Kakao: <code>http://localhost:8080/oauth2/callback/kakao</code></li>
+        <li>Naver: <code>http://localhost:8080/oauth2/callback/naver</code></li>
+        <li>Google: <code>http://localhost:8080/oauth2/callback/google</code></li>
+        <li>인가 시작 URL: <code>http://localhost:8080/oauth2/authorization/{provider}</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'E207_AUTH_TEST_LAST';
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value || '';
+    }
+
+    function safeJsonStringify(obj) {
+      try { return JSON.stringify(obj, null, 2); } catch { return String(obj); }
+    }
+
+    function parseLastFromDom() {
+      const txt = document.getElementById('lastResponse')?.value;
+      if (!txt) return null;
+      try { return JSON.parse(txt); } catch { return null; }
+    }
+
+    function readCookie(name) {
+      // HttpOnly 쿠키는 JS로 읽을 수 없음
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    function getRefreshCookieNameFromLastResponseOrDefault() {
+      // 현재 서버 설정: refresh_cookie_name = refresh_token
+      return 'refresh_token';
+    }
+
+    function applyPayload(payload) {
+      setText('lastResponse', safeJsonStringify(payload));
+
+      const data = payload?.data;
+      if (data?.accessToken) setText('accessToken', data.accessToken);
+      if (data?.refreshToken) setText('refreshToken', data.refreshToken);
+      if (data?.registerToken) setText('registerToken', data.registerToken);
+
+      // oauthError는 별도 필드이므로 lastResponse로만 확인
+
+      // refreshToken은 HttpOnly 쿠키라면 JS로 읽을 수 없고, 화면에 안 찍히는 것이 정상.
+      // cookieRefresh는 HttpOnly=false인 개발환경에서만 동작 가능.
+      const refreshCookieName = getRefreshCookieNameFromLastResponseOrDefault();
+      const cookieRefresh = readCookie(refreshCookieName);
+      if (cookieRefresh) setText('refreshToken', cookieRefresh);
+    }
+
+    function saveToStorage(payload) {
+      localStorage.setItem(STORAGE_KEY, safeJsonStringify(payload));
+    }
+
+    function loadFromStorage() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const payload = JSON.parse(raw);
+        applyPayload(payload);
+      } catch {
+        // ignore
+      }
+    }
+
+    function clearLocal() {
+      localStorage.removeItem(STORAGE_KEY);
+      setText('accessToken', '');
+      setText('refreshToken', '');
+      setText('registerToken', '');
+      setText('lastResponse', '');
+      setText('signUpResponse', '');
+    }
+
+    function getQueryParam(name) {
+      try {
+        const url = new URL(location.href);
+        return url.searchParams.get(name);
+      } catch {
+        return null;
+      }
+    }
+
+    function stripQueryParams() {
+      try {
+        const url = new URL(location.href);
+        if ([...url.searchParams.keys()].length === 0) return;
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+      } catch {
+        // ignore
+      }
+    }
+
+    function bootstrapFromCallbackRedirect() {
+      const accessToken = getQueryParam('accessToken');
+      const registerToken = getQueryParam('registerToken');
+      const oauthError = getQueryParam('oauthError');
+      if (!accessToken && !registerToken && !oauthError) return;
+
+      const payload = {
+        code: oauthError ? 500 : (registerToken ? 404 : 200),
+        message: oauthError
+          ? 'OAuth 처리 중 오류(redirect)'
+          : (registerToken ? '회원가입이 필요합니다.(redirect)' : '소셜 로그인 성공(redirect)'),
+        data: {}
+      };
+
+      if (accessToken) payload.data.accessToken = accessToken;
+      if (registerToken) payload.data.registerToken = registerToken;
+      if (oauthError) payload.data.oauthError = oauthError;
+
+      saveToStorage(payload);
+      applyPayload(payload);
+
+      // 토큰/에러가 URL에 남지 않도록 제거
+      stripQueryParams();
+    }
+
+    // 1) 콜백 redirect 쿼리(accessToken/registerToken/oauthError)가 있으면 최우선 반영
+    bootstrapFromCallbackRedirect();
+
+    // 2) 그 다음 저장된 결과 자동 로드
+    loadFromStorage();
+
+    function fetchRefresh() {
+      fetch('/auth/refresh', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      .then(async (response) => {
+        const json = await response.json();
+        saveToStorage(json);
+        applyPayload(json);
+      })
+      .catch(e => {
+        const payload = { code: 500, message: 'refresh 호출 실패', data: { oauthError: String(e) } };
+        saveToStorage(payload);
+        applyPayload(payload);
+      });
+    }
+
+    async function signUp() {
+      const registerToken = document.getElementById('registerToken')?.value?.trim();
+      const nickname = document.getElementById('nickname')?.value?.trim();
+      const profileImage = document.getElementById('profileImage')?.value?.trim();
+      const isMarketingRaw = document.getElementById('isMarketing')?.value?.trim();
+
+      if (!registerToken) return alert('회원가입 토큰이 없습니다.');
+      if (!nickname) return alert('닉네임을 입력해 주세요.');
+
+      const isMarketing = String(isMarketingRaw).toLowerCase() === 'true';
+
+      const body = { registerToken, nickname, profileImage: profileImage || null, isMarketing };
+
+      fetch('/auth/regist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      .then(response => response.json())
+      .then(applyPayload)
+      .catch(console.error);
+    }
+  </script>
+</body>
+</html>

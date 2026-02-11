@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .architecture {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .box {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+        .box h3 {
+            font-size: 14px;
+            margin: 0 0 10px;
+        }
+        .box p {
+            font-size: 12px;
+            color: #666;
+            margin: 0 0 10px;
+            line-height: 1.5;
+        }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            border: 1px solid #eee;
+        }
+        .arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+        }
+        .arrow span {
+            font-size: 18px;
+            color: #999;
+        }
+        .arrow .label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .pipeline {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .pipeline h3 {
+            font-size: 14px;
+            margin: 0 0 20px;
+        }
+        .steps {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            background: #f8f9fa;
+        }
+        .step .num {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .step h4 {
+            font-size: 12px;
+            margin: 0 0 5px;
+        }
+        .step p {
+            font-size: 10px;
+            color: #666;
+            margin: 0;
+        }
+        .step-arrow {
+            color: #ccc;
+        }
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .benefit {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+        .benefit h4 {
+            font-size: 13px;
+            margin: 0 0 10px;
+        }
+        .benefit p {
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>프론트엔드 ONNX 통합 아키텍처</h1>
+
+    <div class="architecture">
+        <div class="box">
+            <h3>React App</h3>
+            <p>웹캠 스트림 캡처<br>프레임 버퍼링 (5 frames)</p>
+            <div class="code">
+navigator.mediaDevices<br>
+&nbsp;&nbsp;.getUserMedia({ video: true })
+            </div>
+        </div>
+
+        <div class="arrow">
+            <span class="label">Frame Data</span>
+            <span>→</span>
+        </div>
+
+        <div class="box">
+            <h3>ONNX Runtime Web</h3>
+            <p>브라우저 내 모델 로드<br>WebGL 가속 추론</p>
+            <div class="code">
+ort.InferenceSession.create(<br>
+&nbsp;&nbsp;'smile_detector.onnx',<br>
+&nbsp;&nbsp;{ executionProviders: ['webgl'] }<br>
+)
+            </div>
+        </div>
+
+        <div class="arrow">
+            <span class="label">Smile Prob</span>
+            <span>→</span>
+        </div>
+
+        <div class="box">
+            <h3>Game Logic</h3>
+            <p>웃음 확률 > 28% → OUT!<br>실시간 피드백</p>
+            <div class="code">
+if (smileProb > 0.28) {<br>
+&nbsp;&nbsp;triggerGameOver();<br>
+}
+            </div>
+        </div>
+    </div>
+
+    <div class="pipeline">
+        <h3>추론 파이프라인</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="num">1</div>
+                <h4>Capture</h4>
+                <p>웹캠 프레임</p>
+            </div>
+            <span class="step-arrow">→</span>
+            <div class="step">
+                <div class="num">2</div>
+                <h4>Preprocess</h4>
+                <p>224×224, 정규화</p>
+            </div>
+            <span class="step-arrow">→</span>
+            <div class="step">
+                <div class="num">3</div>
+                <h4>Buffer</h4>
+                <p>5프레임 시퀀스</p>
+            </div>
+            <span class="step-arrow">→</span>
+            <div class="step">
+                <div class="num">4</div>
+                <h4>Inference</h4>
+                <p>ONNX WebGL ~40ms</p>
+            </div>
+            <span class="step-arrow">→</span>
+            <div class="step">
+                <div class="num">5</div>
+                <h4>Smoothing</h4>
+                <p>EMA α=0.3</p>
+            </div>
+            <span class="step-arrow">→</span>
+            <div class="step">
+                <div class="num">6</div>
+                <h4>Decision</h4>
+                <p>Threshold 28%</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="benefits">
+        <div class="benefit">
+            <h4>Privacy First</h4>
+            <p>영상이 서버로 전송되지 않음<br>모든 처리가 브라우저 내</p>
+        </div>
+        <div class="benefit">
+            <h4>Low Latency</h4>
+            <p>네트워크 왕복 제거<br>~40ms WebGL 추론</p>
+        </div>
+        <div class="benefit">
+            <h4>Zero Server Cost</h4>
+            <p>AI 추론 서버 불필요<br>클라이언트 리소스 활용</p>
+        </div>
+    </div>
+</body>
+</html>

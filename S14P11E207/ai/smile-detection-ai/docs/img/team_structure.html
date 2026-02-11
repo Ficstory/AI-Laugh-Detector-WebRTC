@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        .section {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+        .member-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .member-role {
+            font-size: 12px;
+            color: #888;
+        }
+        .highlight {
+            background: #f8f9fa;
+            border-left: 3px solid #333;
+            padding-left: 12px;
+            margin-left: -15px;
+            padding-right: 15px;
+        }
+        .badge {
+            font-size: 10px;
+            background: #333;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 2px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>팀 구성 (7명)</h1>
+
+    <div class="org-chart">
+        <div class="row">
+            <div class="section">
+                <div class="section-title">PM (1명)</div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">이재호</div>
+                        <div class="member-role">프로젝트 총괄, 일정 관리</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">AI (1명)</div>
+                <div class="member highlight">
+                    <div>
+                        <div class="member-name">양한빈 <span class="badge">본인</span></div>
+                        <div class="member-role">웃음 감지 모델 설계 및 개발</div>
+                        <div class="member-role">CNN+LSTM 아키텍처, Fine-tuning, ONNX 변환</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="section">
+                <div class="section-title">Frontend (3명)</div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">프론트엔드 개발자 1</div>
+                        <div class="member-role">게임 UI, 웹캠 연동</div>
+                    </div>
+                </div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">프론트엔드 개발자 2</div>
+                        <div class="member-role">ONNX Runtime Web 모델 통합</div>
+                    </div>
+                </div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">프론트엔드 개발자 3</div>
+                        <div class="member-role">실시간 처리 최적화</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Backend (2명)</div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">백엔드 개발자 1</div>
+                        <div class="member-role">게임 로직, 방 관리 API</div>
+                    </div>
+                </div>
+                <div class="member">
+                    <div>
+                        <div class="member-name">백엔드 개발자 2</div>
+                        <div class="member-role">WebSocket, 실시간 통신</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+# =============================================================================
+# 로컬 개발 환경 설정 (Local Development - Full Stack)
+# =============================================================================
+#
+# 📋 개요:
+#   - 개발자 로컬 PC에서 전체 스택 실행
+#   - 모든 서비스(DB + WAS)가 하나의 compose에 포함
+#   - EC2와 달리 분리 없이 단순하게 운영
+#
+# 🚀 사용법:
+#   cd backend
+#   docker compose -f docker-compose.local.yml up -d --build
+#
+# ⚠️ 주의:
+#   - 이 파일은 ADR#003 분리 아키텍처와 다릅니다
+#   - 로컬 개발 편의를 위해 모든 서비스를 하나로 묶음
+#   - EC2 배포 시에는 사용하지 마세요!
+#
+# 🔧 환경변수:
+#   - backend/.env 파일을 참조합니다
+#
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # MySQL Database (로컬용)
+  # ===========================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-local
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${MYSQL_LOCAL_PORT:-3307}:3306"  # 기본값 3307, .env에서 변경 가능
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-local-data:/var/lib/mysql
+    networks:
+      - local-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================================================
+  # Redis Cache (로컬용)
+  # ===========================================================================
+  redis:
+    image: redis:alpine
+    container_name: redis-local
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_LOCAL_PORT:-6380}:6379"  # 기본값 6380, .env에서 변경 가능
+    volumes:
+      - redis-local-data:/data
+    networks:
+      - local-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================================================
+  # MinIO Object Storage (로컬용)
+  # ===========================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: minio-local
+    restart: always
+    ports:
+      - "9000:9000"   # MinIO API
+      - "9001:9001"   # MinIO Console
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio-local-data:/data
+    networks:
+      - local-net
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # ===========================================================================
+  # WAS Application (로컬용 - 단일 인스턴스)
+  # ===========================================================================
+  was:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: was-local:latest
+    container_name: was-local
+    restart: always
+    ports:
+      - "${WAS_LOCAL_PORT:-8081}:${WAS_LOCAL_PORT:-8081}"
+    environment:
+      # -----------------------------------------------------------------------
+      # Spring 설정
+      # -----------------------------------------------------------------------
+      - SPRING_PROFILES_ACTIVE=local
+      - SERVER_PORT=${WAS_LOCAL_PORT:-8081}
+      - SERVER_SSL_ENABLED=false
+      - JAVA_OPTS=-Xms256m -Xmx512m
+
+      # -----------------------------------------------------------------------
+      # JWT
+      # -----------------------------------------------------------------------
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+
+      # -----------------------------------------------------------------------
+      # MySQL (Docker 내부 네트워크로 연결)
+      # -----------------------------------------------------------------------
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+      # -----------------------------------------------------------------------
+      # Redis (Docker 내부 네트워크로 연결)
+      # -----------------------------------------------------------------------
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+      # -----------------------------------------------------------------------
+      # MinIO (Docker 내부 네트워크로 연결)
+      # -----------------------------------------------------------------------
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+
+      # -----------------------------------------------------------------------
+      # OAuth (로컬 개발용 - backend/.env에서 설정)
+      # -----------------------------------------------------------------------
+      - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
+      - KAKAO_REDIRECT_URL=${KAKAO_REDIRECT_URL}
+      - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
+      - NAVER_REST_API_KEY=${NAVER_REST_API_KEY}
+      - NAVER_REDIRECT_URL=${NAVER_REDIRECT_URL}
+      - NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}
+      - GOOGLE_REST_API_KEY=${GOOGLE_REST_API_KEY}
+      - GOOGLE_REDIRECT_URL=${GOOGLE_REDIRECT_URL}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+
+      # -----------------------------------------------------------------------
+      # OpenVidu (선택 - backend/.env에서 설정)
+      # -----------------------------------------------------------------------
+      - OPENVIDU_URL=${OPENVIDU_URL:-}
+      - OPENVIDU_SECRET=${OPENVIDU_SECRET:-}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - local-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  local-net:
+    driver: bridge
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  mysql-local-data:
+    name: mysql-local-data
+  redis-local-data:
+    name: redis-local-data
+  minio-local-data:
+    name: minio-local-data

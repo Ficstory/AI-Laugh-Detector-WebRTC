@@ -1,0 +1,133 @@
+# =============================================================================
+# Production Data Services - Stateful (거의 재시작 안함)
+# =============================================================================
+# 사용법:
+#   docker compose -f docker-compose.data.prod.yml up -d
+#
+# 이 파일은 prod-net 네트워크를 생성합니다.
+# App 서비스들은 이 네트워크를 external로 참조합니다.
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # MySQL Database
+  # ===========================================================================
+  prod-mysql:
+    image: mysql:8.0
+    container_name: prod-mysql
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - prod-mysql-data:/var/lib/mysql
+      - ./mysql/my.prod.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - prod-net
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ===========================================================================
+  # Redis Cache
+  # ===========================================================================
+  prod-redis:
+    image: redis:alpine
+    container_name: prod-redis
+    restart: always
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    volumes:
+      - prod-redis-data:/data
+    networks:
+      - prod-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ===========================================================================
+  # MinIO Object Storage
+  # ===========================================================================
+  prod-minio:
+    image: minio/minio:latest
+    container_name: prod-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
+    volumes:
+      - prod-minio-data:/data
+    networks:
+      - prod-net
+    command: server /data --console-address ":9001"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# =============================================================================
+# Networks - prod-net 생성 담당
+# =============================================================================
+networks:
+  prod-net:
+    name: prod-net
+    driver: bridge
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  prod-mysql-data:
+    name: prod-mysql-data
+  prod-redis-data:
+    name: prod-redis-data
+  prod-minio-data:
+    name: prod-minio-data

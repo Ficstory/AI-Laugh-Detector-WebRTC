@@ -1,0 +1,119 @@
+# =============================================================================
+# Development Data Services - Stateful (거의 재시작 안함)
+# =============================================================================
+# 사용법:
+#   docker compose -f docker-compose.data.dev.yml up -d
+#
+# 이 파일은 dev-net 네트워크를 생성합니다.
+# App 서비스들은 이 네트워크를 external로 참조합니다.
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # MySQL Database
+  # ===========================================================================
+  dev-mysql:
+    image: mysql:8.0
+    container_name: dev-mysql
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - dev-mysql-data:/var/lib/mysql
+      - ./mysql/my.dev.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - dev-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ===========================================================================
+  # Redis Cache
+  # ===========================================================================
+  dev-redis:
+    image: redis:alpine
+    container_name: dev-redis
+    restart: always
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - dev-redis-data:/data
+    networks:
+      - dev-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ===========================================================================
+  # MinIO Object Storage
+  # ===========================================================================
+  dev-minio:
+    image: minio/minio:latest
+    container_name: dev-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
+    volumes:
+      - dev-minio-data:/data
+    networks:
+      - dev-net
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# =============================================================================
+# Networks - dev-net 생성 담당
+# =============================================================================
+networks:
+  dev-net:
+    name: dev-net
+    driver: bridge
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  dev-mysql-data:
+    name: dev-mysql-data
+  dev-redis-data:
+    name: dev-redis-data
+  dev-minio-data:
+    name: dev-minio-data

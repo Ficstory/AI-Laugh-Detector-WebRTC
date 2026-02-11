@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/export_onnx.py:*)",
+      "Bash(pip install:*)",
+      "Bash(python scripts/finetune.py:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(python docs/img/generate_charts.py:*)",
+      "Bash(python3:*)",
+      "Bash(pip3 install:*)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(pip3 list:*)",
+      "Bash(/mnt/c/Users/SSAFY/AppData/Local/Programs/Python/Python*/python.exe)",
+      "Bash(powershell.exe -Command \"python --version\")",
+      "Bash(powershell.exe -Command \"pip install matplotlib numpy\")",
+      "Bash(powershell.exe -Command \"python docs/img/generate_charts.py\")",
+      "Bash(xargs basename:*)",
+      "Bash(for:*)",
+      "Bash(done)",
+      "Bash(python scripts/evaluate_baseline.py:*)",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\Users\\\\SSAFY\\\\Desktop\\\\S14P11E207\\\\ai\\\\smile-detection-ai''; python scripts/evaluate_baseline.py --save --title ''Finetuned Model \\(10 Epochs\\) - ROC Curve''\")",
+      "Bash(find:*)",
+      "Bash(powershell.exe -Command \"python -m pip install mlflow\")",
+      "Bash(python:*)",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\Users\\\\SSAFY\\\\Desktop\\\\S14P11E207\\\\ai\\\\smile-detection-ai''; python train.py 2>&1 | Tee-Object -FilePath ''training_baseline.log''\")",
+      "Bash(cmd.exe /c \"cd /d C:\\\\Users\\\\SSAFY\\\\Desktop\\\\S14P11E207\\\\ai\\\\smile-detection-ai && python train.py > training_baseline.log 2>&1 &\")",
+      "Bash(powershell.exe -Command \"python -c \"\"import torch; print\\(''CUDA available:'', torch.cuda.is_available\\(\\)\\); print\\(''CUDA version:'', torch.version.cuda if torch.cuda.is_available\\(\\) else ''N/A''\\); print\\(''Device count:'', torch.cuda.device_count\\(\\) if torch.cuda.is_available\\(\\) else 0\\); print\\(''Device name:'', torch.cuda.get_device_name\\(0\\) if torch.cuda.is_available\\(\\) else ''N/A''\\)\"\"\")",
+      "Bash(powershell.exe -Command \"C:/Users/SSAFY/Desktop/S14P11E207/ai/venv/Scripts/python.exe -c \"\"import torch; print\\(''CUDA available:'', torch.cuda.is_available\\(\\)\\)\"\"\")",
+      "Bash(tldr extract:*)",
+      "Bash(venv/bin/python:*)",
+      "Bash(.venv/bin/python:*)"
+    ]
+  }
+}

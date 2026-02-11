@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="ko" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웃음 참기 챌린지 - 와이어프레임</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .wireframe-box {
+      border: 2px dashed #94a3b8;
+      background: repeating-linear-gradient(
+        45deg,
+        #f8fafc,
+        #f8fafc 10px,
+        #f1f5f9 10px,
+        #f1f5f9 20px
+      );
+    }
+    .screen-card {
+      transition: all 0.3s ease;
+    }
+    .screen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .nav-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-slate-100">
+  <div id="app" class="h-full overflow-auto"><!-- Header -->
+   <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+       <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center text-xl">
+        😂
+       </div>
+       <h1 id="main-title" class="text-xl font-bold text-slate-800">웃음 참기 챌린지</h1><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">Wireframe</span>
+      </div>
+      <div class="flex gap-2"><span class="text-sm text-slate-500">총 8개 화면</span>
+      </div>
+     </div>
+    </div>
+   </header><!-- Navigation -->
+   <nav class="bg-white border-b border-slate-200 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4">
+     <div class="flex gap-2 py-3 overflow-x-auto"><button class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap" data-section="all">전체 보기</button> <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200" data-section="entry">진입/인증</button> <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200" data-section="lobby">로비/매칭</button> <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200" data-section="game">게임플레이</button> <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200" data-section="result">결과/기록</button>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main class="max-w-7xl mx-auto px-4 py-8"><!-- Section 1: 진입/인증 -->
+    <section id="section-entry" class="mb-12">
+     <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+       1
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800">진입 / 인증</h2>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6"><!-- 1-1: 스플래시/온보딩 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-purple-50 px-4 py-3 border-b border-purple-100"><span class="text-xs font-medium text-purple-600">Screen 1-1</span>
+        <h3 class="font-bold text-slate-800">스플래시 / 온보딩</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-4 aspect-[9/16] max-h-80 flex flex-col"><!-- Logo Area -->
+         <div class="flex-1 flex flex-col items-center justify-center">
+          <div class="w-20 h-20 bg-slate-300 rounded-2xl mb-4 flex items-center justify-center text-3xl">
+           😂
+          </div>
+          <div class="h-6 bg-slate-300 rounded w-32 mb-2"></div>
+          <div class="h-3 bg-slate-200 rounded w-24"></div>
+         </div><!-- Onboarding Dots -->
+         <div class="flex justify-center gap-2 mb-4">
+          <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+          <div class="w-2 h-2 bg-slate-300 rounded-full"></div>
+          <div class="w-2 h-2 bg-slate-300 rounded-full"></div>
+         </div><!-- CTA Button -->
+         <div class="h-12 bg-slate-400 rounded-xl"></div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 앱 로고 및 브랜딩</li>
+         <li>• 서비스 소개 슬라이드 (3-4장)</li>
+         <li>• 시작하기 버튼</li>
+        </ul>
+       </div>
+      </div><!-- 1-2: 로그인/회원가입 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-purple-50 px-4 py-3 border-b border-purple-100"><span class="text-xs font-medium text-purple-600">Screen 1-2</span>
+        <h3 class="font-bold text-slate-800">로그인 / 회원가입</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-4 aspect-[9/16] max-h-80 flex flex-col"><!-- Header -->
+         <div class="h-5 bg-slate-300 rounded w-24 mb-6 mx-auto"></div><!-- Social Login -->
+         <div class="space-y-3 mb-6">
+          <div class="h-11 bg-yellow-200 rounded-xl flex items-center justify-center"><span class="text-xs text-yellow-800">카카오 로그인</span>
+          </div>
+          <div class="h-11 bg-green-200 rounded-xl flex items-center justify-center"><span class="text-xs text-green-800">네이버 로그인</span>
+          </div>
+          <div class="h-11 bg-slate-200 rounded-xl flex items-center justify-center"><span class="text-xs text-slate-600">Google 로그인</span>
+          </div>
+         </div><!-- Divider -->
+         <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 h-px bg-slate-300"></div><span class="text-xs text-slate-400">또는</span>
+          <div class="flex-1 h-px bg-slate-300"></div>
+         </div><!-- Email Login -->
+         <div class="h-10 bg-slate-200 rounded-lg mb-2"></div>
+         <div class="h-10 bg-slate-200 rounded-lg mb-4"></div>
+         <div class="h-11 bg-slate-400 rounded-xl"></div><!-- Guest -->
+         <div class="mt-auto pt-4 text-center">
+          <div class="h-3 bg-slate-200 rounded w-20 mx-auto"></div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 소셜 로그인 (카카오, 네이버, 구글)</li>
+         <li>• 이메일/비밀번호 로그인</li>
+         <li>• 게스트 모드 (제한된 기능)</li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section><!-- Section 2: 로비/매칭 -->
+    <section id="section-lobby" class="mb-12">
+     <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+       2
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800">로비 / 매칭</h2>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- 2-1: 메인 로비 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-blue-50 px-4 py-3 border-b border-blue-100"><span class="text-xs font-medium text-blue-600">Screen 2-1</span>
+        <h3 class="font-bold text-slate-800">메인 로비</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Top Bar -->
+         <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center gap-2">
+           <div class="w-8 h-8 bg-slate-300 rounded-full"></div>
+           <div class="h-3 bg-slate-300 rounded w-16"></div>
+          </div>
+          <div class="flex gap-2">
+           <div class="w-6 h-6 bg-slate-300 rounded"></div>
+           <div class="w-6 h-6 bg-slate-300 rounded"></div>
+          </div>
+         </div><!-- Mode Selection -->
+         <div class="grid grid-cols-2 gap-2 mb-3">
+          <div class="bg-blue-200 rounded-lg p-3 text-center">
+           <div class="text-lg mb-1">
+            👤
+           </div>
+           <div class="h-2 bg-blue-300 rounded w-full"></div>
+          </div>
+          <div class="bg-orange-200 rounded-lg p-3 text-center">
+           <div class="text-lg mb-1">
+            👥
+           </div>
+           <div class="h-2 bg-orange-300 rounded w-full"></div>
+          </div>
+         </div><!-- Quick Match -->
+         <div class="h-10 bg-slate-400 rounded-xl mb-3 flex items-center justify-center"><span class="text-white text-xs">빠른 매칭</span>
+         </div><!-- Stats -->
+         <div class="bg-slate-200 rounded-lg p-2 mb-2">
+          <div class="flex justify-between">
+           <div class="h-2 bg-slate-300 rounded w-12"></div>
+           <div class="h-2 bg-slate-300 rounded w-8"></div>
+          </div>
+         </div><!-- Bottom Nav -->
+         <div class="mt-auto flex justify-around pt-2 border-t border-slate-300">
+          <div class="w-6 h-6 bg-slate-400 rounded"></div>
+          <div class="w-6 h-6 bg-slate-300 rounded"></div>
+          <div class="w-6 h-6 bg-slate-300 rounded"></div>
+          <div class="w-6 h-6 bg-slate-300 rounded"></div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 1:1 / M:M 모드 선택</li>
+         <li>• 빠른 매칭 버튼</li>
+         <li>• 전적 요약 표시</li>
+         <li>• 하단 네비게이션</li>
+        </ul>
+       </div>
+      </div><!-- 2-2: 방 생성 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-blue-50 px-4 py-3 border-b border-blue-100"><span class="text-xs font-medium text-blue-600">Screen 2-2</span>
+        <h3 class="font-bold text-slate-800">방 생성 / 설정</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Header -->
+         <div class="flex items-center gap-2 mb-4">
+          <div class="w-5 h-5 bg-slate-300 rounded"></div>
+          <div class="h-4 bg-slate-300 rounded w-20"></div>
+         </div><!-- Settings -->
+         <div class="space-y-3 flex-1">
+          <div>
+           <div class="h-2 bg-slate-400 rounded w-16 mb-1"></div>
+           <div class="h-8 bg-slate-200 rounded-lg"></div>
+          </div>
+          <div>
+           <div class="h-2 bg-slate-400 rounded w-20 mb-1"></div>
+           <div class="flex gap-2">
+            <div class="h-8 bg-blue-200 rounded-lg flex-1"></div>
+            <div class="h-8 bg-slate-200 rounded-lg flex-1"></div>
+           </div>
+          </div>
+          <div>
+           <div class="h-2 bg-slate-400 rounded w-24 mb-1"></div>
+           <div class="h-8 bg-slate-200 rounded-lg"></div>
+          </div>
+          <div>
+           <div class="h-2 bg-slate-400 rounded w-16 mb-1"></div>
+           <div class="flex gap-2">
+            <div class="h-8 bg-slate-200 rounded-lg flex-1 text-center leading-8">
+             30초
+            </div>
+            <div class="h-8 bg-blue-200 rounded-lg flex-1 text-center leading-8">
+             60초
+            </div>
+            <div class="h-8 bg-slate-200 rounded-lg flex-1 text-center leading-8">
+             90초
+            </div>
+           </div>
+          </div>
+          <div class="flex items-center justify-between">
+           <div class="h-2 bg-slate-400 rounded w-20"></div>
+           <div class="w-10 h-5 bg-blue-400 rounded-full"></div>
+          </div>
+         </div><!-- Create Button -->
+         <div class="h-10 bg-slate-400 rounded-xl mt-3"></div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 방 제목 입력</li>
+         <li>• 게임 모드 (1:1 / M:M)</li>
+         <li>• 인원 설정 (2~10명)</li>
+         <li>• 라운드 시간 설정</li>
+         <li>• 공개/비공개 토글</li>
+        </ul>
+       </div>
+      </div><!-- 2-3: 매칭 대기 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-blue-50 px-4 py-3 border-b border-blue-100"><span class="text-xs font-medium text-blue-600">Screen 2-3</span>
+        <h3 class="font-bold text-slate-800">매칭 대기실</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Room Info -->
+         <div class="text-center mb-3">
+          <div class="h-4 bg-slate-300 rounded w-24 mx-auto mb-1"></div>
+          <div class="h-2 bg-slate-200 rounded w-16 mx-auto"></div>
+         </div><!-- Participants -->
+         <div class="flex-1 grid grid-cols-2 gap-2 content-start">
+          <div class="bg-green-100 rounded-lg p-2 text-center border-2 border-green-400">
+           <div class="w-10 h-10 bg-green-300 rounded-full mx-auto mb-1"></div>
+           <div class="h-2 bg-green-400 rounded w-12 mx-auto"></div>
+           <div class="text-green-600 mt-1">
+            준비완료
+           </div>
+          </div>
+          <div class="bg-slate-100 rounded-lg p-2 text-center border-2 border-slate-300">
+           <div class="w-10 h-10 bg-slate-300 rounded-full mx-auto mb-1"></div>
+           <div class="h-2 bg-slate-400 rounded w-12 mx-auto"></div>
+           <div class="text-slate-400 mt-1">
+            대기중
+           </div>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-2 text-center border-2 border-dashed border-slate-300">
+           <div class="w-10 h-10 bg-slate-200 rounded-full mx-auto mb-1 flex items-center justify-center">
+            +
+           </div>
+           <div class="text-slate-400">
+            빈 자리
+           </div>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-2 text-center border-2 border-dashed border-slate-300">
+           <div class="w-10 h-10 bg-slate-200 rounded-full mx-auto mb-1 flex items-center justify-center">
+            +
+           </div>
+           <div class="text-slate-400">
+            빈 자리
+           </div>
+          </div>
+         </div><!-- Invite Code -->
+         <div class="bg-slate-200 rounded-lg p-2 mb-2 flex items-center justify-between">
+          <div class="h-3 bg-slate-300 rounded w-20"></div>
+          <div class="w-6 h-6 bg-slate-400 rounded"></div>
+         </div><!-- Buttons -->
+         <div class="flex gap-2">
+          <div class="h-10 bg-slate-300 rounded-xl flex-1"></div>
+          <div class="h-10 bg-green-400 rounded-xl flex-1"></div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 참가자 목록 및 상태</li>
+         <li>• 초대 코드 / 링크 공유</li>
+         <li>• 준비 완료 버튼</li>
+         <li>• 방장: 게임 시작 버튼</li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section><!-- Section 3: 게임플레이 -->
+    <section id="section-game" class="mb-12">
+     <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+       3
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800">게임플레이</h2>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- 3-1: 1:1 게임 화면 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-green-50 px-4 py-3 border-b border-green-100"><span class="text-xs font-medium text-green-600">Screen 3-1</span>
+        <h3 class="font-bold text-slate-800">1:1 게임 화면</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Timer -->
+         <div class="text-center mb-2">
+          <div class="inline-block bg-red-400 text-white px-4 py-1 rounded-full font-bold">
+           00:45
+          </div>
+         </div><!-- Opponent Video -->
+         <div class="flex-1 bg-slate-300 rounded-xl mb-2 flex items-center justify-center relative">
+          <div class="text-2xl">
+           🎥
+          </div>
+          <div class="absolute top-2 left-2 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
+           상대방
+          </div>
+          <div class="absolute bottom-2 right-2 flex gap-1">
+           <div class="w-5 h-5 bg-slate-400 rounded"></div>
+           <div class="w-5 h-5 bg-slate-400 rounded"></div>
+          </div>
+         </div><!-- My Video -->
+         <div class="h-20 bg-slate-400 rounded-xl flex items-center justify-center relative">
+          <div class="text-xl">
+           🙂
+          </div>
+          <div class="absolute top-2 left-2 bg-black/50 text-white px-2 py-0.5 rounded text-xs">
+           나
+          </div>
+         </div><!-- Laugh Meter -->
+         <div class="mt-2">
+          <div class="flex justify-between mb-1"><span class="text-slate-500">웃음 게이지</span> <span class="text-red-500">72%</span>
+          </div>
+          <div class="h-3 bg-slate-200 rounded-full overflow-hidden">
+           <div class="h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 w-3/4"></div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 실시간 화상 통화</li>
+         <li>• 라운드 타이머</li>
+         <li>• AI 웃음 감지 게이지</li>
+         <li>• 음소거/카메라 전환</li>
+        </ul>
+       </div>
+      </div><!-- 3-2: M:M 게임 화면 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-green-50 px-4 py-3 border-b border-green-100"><span class="text-xs font-medium text-green-600">Screen 3-2</span>
+        <h3 class="font-bold text-slate-800">M:M 그룹 게임</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Header -->
+         <div class="flex justify-between items-center mb-2">
+          <div class="bg-red-400 text-white px-3 py-1 rounded-full font-bold text-xs">
+           01:23
+          </div>
+          <div class="bg-slate-300 px-2 py-1 rounded">
+           라운드 2/3
+          </div>
+         </div><!-- Video Grid -->
+         <div class="flex-1 grid grid-cols-2 gap-1 mb-2">
+          <div class="bg-slate-300 rounded-lg relative">
+           <div class="absolute top-1 left-1 bg-black/50 text-white px-1 rounded text-xs">
+            웃김이
+           </div>
+           <div class="absolute bottom-1 right-1 text-xs">
+            🎭
+           </div>
+          </div>
+          <div class="bg-slate-400 rounded-lg relative">
+           <div class="absolute top-1 left-1 bg-black/50 text-white px-1 rounded text-xs">
+            나
+           </div>
+           <div class="absolute bottom-1 left-1">
+            <div class="h-1 w-8 bg-yellow-400 rounded"></div>
+           </div>
+          </div>
+          <div class="bg-slate-300 rounded-lg relative">
+           <div class="absolute top-1 left-1 bg-black/50 text-white px-1 rounded text-xs">
+            참가자3
+           </div>
+           <div class="absolute bottom-1 left-1">
+            <div class="h-1 w-6 bg-green-400 rounded"></div>
+           </div>
+          </div>
+          <div class="bg-slate-300 rounded-lg relative">
+           <div class="absolute top-1 left-1 bg-red-500 text-white px-1 rounded text-xs">
+            OUT
+           </div>
+          </div>
+         </div><!-- Status Bar -->
+         <div class="bg-slate-200 rounded-lg p-2">
+          <div class="flex justify-between items-center"><span class="text-slate-600">생존: 3/4</span> <span class="text-orange-500">내 게이지: 45%</span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 다인원 그리드 뷰</li>
+         <li>• 개인별 웃음 게이지</li>
+         <li>• 탈락자 표시 (OUT)</li>
+         <li>• 웃기는 역할 표시</li>
+        </ul>
+       </div>
+      </div><!-- 3-3: 웃기는 사람 화면 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-green-50 px-4 py-3 border-b border-green-100"><span class="text-xs font-medium text-green-600">Screen 3-3</span>
+        <h3 class="font-bold text-slate-800">웃기는 역할 화면</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-72 flex flex-col text-xs"><!-- Role Badge -->
+         <div class="text-center mb-2">
+          <div class="inline-block bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full font-bold">
+           🎭 웃기는 차례!
+          </div>
+         </div><!-- Opponent -->
+         <div class="flex-1 bg-slate-300 rounded-xl mb-2 flex items-center justify-center relative">
+          <div class="text-2xl">
+           😐
+          </div>
+          <div class="absolute top-2 left-2 bg-black/50 text-white px-2 py-0.5 rounded">
+           참는 중...
+          </div>
+          <div class="absolute bottom-2 left-2 right-2">
+           <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div class="h-full bg-yellow-400 w-1/3"></div>
+           </div>
+          </div>
+         </div><!-- Tools -->
+         <div class="bg-yellow-50 rounded-xl p-2 border-2 border-yellow-300">
+          <div class="text-center text-yellow-800 font-medium mb-2">
+           도구 선택
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+           <div class="aspect-square bg-yellow-200 rounded-lg flex items-center justify-center text-lg">
+            🎵
+           </div>
+           <div class="aspect-square bg-yellow-200 rounded-lg flex items-center justify-center text-lg">
+            😜
+           </div>
+           <div class="aspect-square bg-yellow-200 rounded-lg flex items-center justify-center text-lg">
+            🎪
+           </div>
+           <div class="aspect-square bg-yellow-200 rounded-lg flex items-center justify-center text-lg">
+            🃏
+           </div>
+          </div>
+         </div><!-- My Preview -->
+         <div class="mt-2 h-16 bg-slate-400 rounded-xl flex items-center justify-center"><span class="text-white">내 모습 미리보기</span>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 역할 표시 배지</li>
+         <li>• 상대방 웃음 게이지 실시간</li>
+         <li>• 웃기는 도구 (효과음, 필터 등)</li>
+         <li>• 내 카메라 미리보기</li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section><!-- Section 4: 결과/기록 -->
+    <section id="section-result" class="mb-12">
+     <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+       4
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800">결과 / 기록</h2>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6"><!-- 4-1: 게임 결과 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-orange-50 px-4 py-3 border-b border-orange-100"><span class="text-xs font-medium text-orange-600">Screen 4-1</span>
+        <h3 class="font-bold text-slate-800">게임 결과</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-80 flex flex-col text-xs"><!-- Winner -->
+         <div class="text-center mb-3">
+          <div class="text-3xl mb-1">
+           🏆
+          </div>
+          <div class="h-5 bg-yellow-400 rounded w-20 mx-auto mb-1"></div>
+          <div class="h-3 bg-slate-300 rounded w-16 mx-auto"></div>
+         </div><!-- Stats Card -->
+         <div class="bg-slate-100 rounded-xl p-3 mb-3">
+          <div class="grid grid-cols-3 gap-2 text-center">
+           <div>
+            <div class="text-lg font-bold text-blue-500">
+             45초
+            </div>
+            <div class="text-slate-500">
+             버틴 시간
+            </div>
+           </div>
+           <div>
+            <div class="text-lg font-bold text-green-500">
+             3회
+            </div>
+            <div class="text-slate-500">
+             웃긴 횟수
+            </div>
+           </div>
+           <div>
+            <div class="text-lg font-bold text-purple-500">
+             +150
+            </div>
+            <div class="text-slate-500">
+             포인트
+            </div>
+           </div>
+          </div>
+         </div><!-- Ranking -->
+         <div class="flex-1 space-y-2">
+          <div class="flex items-center gap-2 bg-yellow-100 rounded-lg p-2"><span class="text-yellow-600 font-bold">1</span>
+           <div class="w-6 h-6 bg-yellow-300 rounded-full"></div>
+           <div class="h-2 bg-yellow-400 rounded flex-1"></div><span class="text-yellow-600">45초</span>
+          </div>
+          <div class="flex items-center gap-2 bg-slate-100 rounded-lg p-2"><span class="text-slate-600 font-bold">2</span>
+           <div class="w-6 h-6 bg-slate-300 rounded-full"></div>
+           <div class="h-2 bg-slate-400 rounded flex-1"></div><span class="text-slate-600">32초</span>
+          </div>
+         </div><!-- Actions -->
+         <div class="grid grid-cols-2 gap-2 mt-3">
+          <div class="h-10 bg-slate-300 rounded-xl flex items-center justify-center">
+           공유
+          </div>
+          <div class="h-10 bg-blue-400 rounded-xl flex items-center justify-center text-white">
+           재대결
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 승자 표시 및 축하 효과</li>
+         <li>• 게임 통계 (시간, 점수)</li>
+         <li>• 순위 표시 (M:M)</li>
+         <li>• 재대결 / 공유 버튼</li>
+        </ul>
+       </div>
+      </div><!-- 4-2: 전적/프로필 -->
+      <div class="screen-card bg-white rounded-2xl overflow-hidden shadow-lg">
+       <div class="bg-orange-50 px-4 py-3 border-b border-orange-100"><span class="text-xs font-medium text-orange-600">Screen 4-2</span>
+        <h3 class="font-bold text-slate-800">내 프로필 / 전적</h3>
+       </div>
+       <div class="p-4">
+        <div class="wireframe-box rounded-xl p-3 aspect-[9/16] max-h-80 flex flex-col text-xs"><!-- Profile Header -->
+         <div class="flex items-center gap-3 mb-4">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"></div>
+          <div>
+           <div class="h-4 bg-slate-400 rounded w-24 mb-1"></div>
+           <div class="h-2 bg-slate-300 rounded w-16"></div>
+          </div>
+          <div class="ml-auto w-8 h-8 bg-slate-200 rounded-lg"></div>
+         </div><!-- Stats Grid -->
+         <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="bg-blue-50 rounded-lg p-2 text-center">
+           <div class="text-lg font-bold text-blue-600">
+            127
+           </div>
+           <div class="text-slate-500">
+            총 게임
+           </div>
+          </div>
+          <div class="bg-green-50 rounded-lg p-2 text-center">
+           <div class="text-lg font-bold text-green-600">
+            68%
+           </div>
+           <div class="text-slate-500">
+            승률
+           </div>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-2 text-center">
+           <div class="text-lg font-bold text-purple-600">
+            52초
+           </div>
+           <div class="text-slate-500">
+            평균
+           </div>
+          </div>
+         </div><!-- Tabs -->
+         <div class="flex gap-1 mb-3">
+          <div class="flex-1 h-8 bg-slate-400 rounded-lg text-white flex items-center justify-center">
+           전적
+          </div>
+          <div class="flex-1 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
+           뱃지
+          </div>
+          <div class="flex-1 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
+           친구
+          </div>
+         </div><!-- History List -->
+         <div class="flex-1 space-y-2 overflow-auto">
+          <div class="flex items-center gap-2 bg-green-50 rounded-lg p-2 border-l-4 border-green-400">
+           <div class="text-green-600 font-bold">
+            승
+           </div>
+           <div class="flex-1">
+            <div class="h-2 bg-slate-300 rounded w-20"></div>
+           </div>
+           <div class="text-slate-400">
+            방금
+           </div>
+          </div>
+          <div class="flex items-center gap-2 bg-red-50 rounded-lg p-2 border-l-4 border-red-400">
+           <div class="text-red-600 font-bold">
+            패
+           </div>
+           <div class="flex-1">
+            <div class="h-2 bg-slate-300 rounded w-16"></div>
+           </div>
+           <div class="text-slate-400">
+            1시간
+           </div>
+          </div>
+          <div class="flex items-center gap-2 bg-green-50 rounded-lg p-2 border-l-4 border-green-400">
+           <div class="text-green-600 font-bold">
+            승
+           </div>
+           <div class="flex-1">
+            <div class="h-2 bg-slate-300 rounded w-24"></div>
+           </div>
+           <div class="text-slate-400">
+            어제
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="px-4 pb-4">
+        <p class="text-sm text-slate-600 mb-2">📌 주요 기능:</p>
+        <ul class="text-xs text-slate-500 space-y-1">
+         <li>• 프로필 정보 편집</li>
+         <li>• 전체 통계 (승률, 평균)</li>
+         <li>• 최근 게임 기록</li>
+         <li>• 뱃지/업적, 친구 목록</li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section><!-- Feature Summary -->
+    <section class="bg-white rounded-2xl p-6 shadow-lg">
+     <h2 class="text-xl font-bold text-slate-800 mb-4">📋 기능 요약</h2>
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-purple-50 rounded-xl p-4">
+       <h3 class="font-bold text-purple-700 mb-2">🔐 인증</h3>
+       <ul class="text-sm text-slate-600 space-y-1">
+        <li>• 소셜 로그인 (3종)</li>
+        <li>• 이메일 회원가입</li>
+        <li>• 게스트 모드</li>
+       </ul>
+      </div>
+      <div class="bg-blue-50 rounded-xl p-4">
+       <h3 class="font-bold text-blue-700 mb-2">🎮 매칭</h3>
+       <ul class="text-sm text-slate-600 space-y-1">
+        <li>• 빠른 매칭</li>
+        <li>• 방 생성/참여</li>
+        <li>• 초대 코드 공유</li>
+       </ul>
+      </div>
+      <div class="bg-green-50 rounded-xl p-4">
+       <h3 class="font-bold text-green-700 mb-2">🎬 게임</h3>
+       <ul class="text-sm text-slate-600 space-y-1">
+        <li>• 실시간 화상통화</li>
+        <li>• AI 웃음 감지</li>
+        <li>• 웃기는 도구들</li>
+       </ul>
+      </div>
+      <div class="bg-orange-50 rounded-xl p-4">
+       <h3 class="font-bold text-orange-700 mb-2">📊 기록</h3>
+       <ul class="text-sm text-slate-600 space-y-1">
+        <li>• 게임 결과/통계</li>
+        <li>• 전적 관리</li>
+        <li>• 뱃지/업적</li>
+       </ul>
+      </div>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="bg-slate-800 text-slate-400 text-center py-6 text-sm">
+    웃음 참기 챌린지 와이어프레임 v1.0 | 총 8개 화면
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: '웃음 참기 챌린지'
+    };
+
+    async function onConfigChange(config) {
+      const title = config.app_title || defaultConfig.app_title;
+      const titleEl = document.getElementById('main-title');
+      if (titleEl) {
+        titleEl.textContent = title;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['app_title', config.app_title || defaultConfig.app_title]
+      ]);
+    }
+
+    // Navigation functionality
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        document.querySelectorAll('.nav-btn').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('bg-slate-100', 'text-slate-600');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('bg-slate-100', 'text-slate-600');
+
+        // Filter sections
+        const section = btn.dataset.section;
+        const allSections = document.querySelectorAll('section[id^="section-"]');
+        
+        if (section === 'all') {
+          allSections.forEach(s => s.style.display = 'block');
+        } else {
+          allSections.forEach(s => {
+            if (s.id === `section-${section}`) {
+              s.style.display = 'block';
+            } else {
+              s.style.display = 'none';
+            }
+          });
+        }
+      });
+    });
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bc5125f26c7d7e0',t:'MTc2ODE0MTQwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

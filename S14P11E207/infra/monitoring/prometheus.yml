@@ -1,0 +1,32 @@
+# =============================================================================
+# Prometheus Configuration
+# =============================================================================
+global:
+  scrape_interval: 15s  # 메트릭 수집 주기
+  evaluation_interval: 15s
+
+scrape_configs:
+  # 1. Prometheus 자체 모니터링
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 2. cAdvisor (Container Resource Stats)
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  # 3. Production WAS (Blue/Green)
+  # Nginx가 아닌 각 컨테이너 직접 타겟팅 (Docker Network 내부)
+  - job_name: 'prod-was'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prod-was-blue:8081', 'prod-was-green:8082']
+
+  # 4. Development WAS
+  - job_name: 'dev-was'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['dev-was:8080']

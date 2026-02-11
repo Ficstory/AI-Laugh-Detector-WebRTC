@@ -1,0 +1,32 @@
+# =============================================================================
+# MySQL Development Configuration
+# =============================================================================
+[mysqld]
+# Character Set
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# InnoDB Settings (Development - Lower Memory)
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+innodb_flush_log_at_trx_commit = 2
+
+# Connection Settings
+max_connections = 50
+wait_timeout = 300
+interactive_timeout = 300
+
+# Performance Schema (useful for debugging)
+performance_schema = ON
+
+# General Query Log (disabled by default, enable for debugging)
+# general_log = 1
+# general_log_file = /var/lib/mysql/general.log
+
+# Slow Query Log
+slow_query_log = 1
+slow_query_log_file = /var/lib/mysql/slow.log
+long_query_time = 1
+
+[client]
+default-character-set = utf8mb4

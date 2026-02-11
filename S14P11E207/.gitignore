@@ -1,0 +1,190 @@
+###############################################################################
+# 프로젝트 공통 .gitignore
+# (Windows + macOS + React(Node) + Python + Java + Gradle + IntelliJ + VSCode)
+###############################################################################
+
+######################
+# IntelliJ / JetBrains
+######################
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+out/
+
+# 사용자/캐시/플러그인 설정 (불필요)
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources/
+.idea/**/sonarlint/
+.idea/**/markdown-navigator/
+.idea/$CACHE_FILE$
+
+######################
+# VSCode
+######################
+.vscode/
+.history/
+.ionide/
+
+# 필요시 유지할 수 있는 설정 파일 예외
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+######################
+# Java & JVM
+######################
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.log
+*.ctxt
+hs_err_pid*
+replay_pid*
+
+######################
+# Gradle
+######################
+.gradle/
+build/
+**/build/
+!src/**/build/          # src 하위 build 허용
+gradle-app.setting
+!.gradle-wrapper.jar
+!.gradle-wrapper.properties
+.gradle-task-name-cache
+*.hprof
+
+######################
+# Python
+######################
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+.Python
+dist/
+build/
+.eggs/
+*.egg-info/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.tox/
+.nox/
+.cache/
+.mypy_cache/
+.pyre/
+.pytype/
+cython_debug/
+.poetry.toml
+.ruff_cache/
+__pypackages__/
+.ipynb_checkpoints/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+
+# Flask
+instance/
+.webassets-cache/
+
+######################
+# React / Node.js
+######################
+node_modules/
+bower_components/
+# logs/ 폴더 내 로그 파일만 무시 (.gitkeep 제외)
+logs/**/*.log
+logs/**/*.log.*
+!logs/**/.gitkeep
+**/*.backup.*
+**/*.back.*
+.DS_*
+*.sublime*
+thumb
+sketch
+psd
+
+######################
+# Windows OS
+######################
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Thumbs.db:encryptable
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.stackdump
+
+######################
+# macOS
+######################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.apdisk
+*.icloud
+
+######################
+# 기타 Python 문서/도구
+######################
+MANIFEST
+docs/_build/
+target/
+.site/
+
+######################
+# Jupyter
+######################
+.ipynb_checkpoints/
+
+######################
+# Environments / Secret configs (옵션)
+######################
+.env
+.env.*
+
+######################
+# SSL Certificates
+######################
+infra/nginx-proxy/ssl/
+*.pem
+
+exec/PORTING_MANUAL.md

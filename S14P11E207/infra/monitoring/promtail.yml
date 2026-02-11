@@ -1,0 +1,63 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # ===========================================================================
+  # Docker Logging via Service Discovery (Robust)
+  # ===========================================================================
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+    relabel_configs:
+      # 1. 14e207 프로젝트 컨테이너만 수집 (옵션)
+      # - source_labels: [__meta_docker_container_name]
+      #   regex: '/(.*(was|nginx|mysql|redis).*)'
+      #   action: keep
+      # 2. 컨테이너 이름을 'container' 라벨로 매핑
+      - source_labels: [__meta_docker_container_name]
+        regex: '/(.*)'
+        target_label: container
+      # 3. 로그 파일 경로 매핑
+      - source_labels: [__meta_docker_container_log_stream]
+        target_label: stream
+    pipeline_stages:
+      - json:
+          expressions:
+            output: log
+            stream: stream
+            attrs:
+      - json:
+          expressions:
+            tag:
+          source: attrs
+      - output:
+          source: output
+
+  # ===========================================================================
+  # File Based Logs (Backup / Nginx Direct Access)
+  # ===========================================================================
+  - job_name: nginx-access
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          type: access
+          __path__: /var/log/project/nginx/access.log
+
+  - job_name: nginx-error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          type: error
+          __path__: /var/log/project/nginx/error.log

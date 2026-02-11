@@ -1,0 +1,38 @@
+# Jenkins 추천 플러그인 목록
+# CI/CD 필수 플러그인
+
+# Pipeline 관련
+workflow-aggregator
+pipeline-stage-view
+pipeline-graph-view
+
+# Git 관련
+git
+github
+gitlab-plugin
+
+# Docker 관련
+docker-workflow
+docker-plugin
+
+# 자격 증명 관리
+credentials
+credentials-binding
+ssh-credentials
+
+# 빌드 도구
+gradle
+
+# 알림/통지
+slack
+mattermost
+
+# 유틸리티
+timestamper
+ansicolor
+ws-cleanup
+rebuild
+
+# Blue Ocean UI (선택사항 - 모던 UI)
+blueocean
+

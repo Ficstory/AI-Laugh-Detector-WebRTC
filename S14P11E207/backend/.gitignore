@@ -1,0 +1,157 @@
+###############################################################################
+# 프로젝트 공통 .gitignore (Java / Gradle / IntelliJ / VSCode / macOS / Windows)
+###############################################################################
+
+######################
+# IntelliJ 전문 파일
+######################
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# 사용자 설정/캐시/작업 기록
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml        # AWS 플러그인 정보
+.idea/**/contentModel.xml
+.idea/**/sonarlint/
+.idea/**/httpRequests
+.idea/**/caches/
+.idea/**/dataSources/
+.idea/**/markdown-navigator/
+.idea/$CACHE_FILE$
+
+# 빌드 산출물
+out/
+.idea_modules/
+
+######################
+# VS Code 설정 파일
+######################
+.vscode/
+.history/
+.ionide/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+######################
+# Java & JVM 관련
+######################
+*.class
+*.log
+*.ctxt                     # BlueJ
+.mtj.tmp/                  # Java ME
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*                # JVM Crash 로그
+replay_pid*                # Replay 로그
+
+######################
+# Gradle
+######################
+.gradle/
+gradle-app.setting
+.build/
+build/
+**/build/
+!src/**/build/             # src 하위 build는 허용
+
+# Gradle Wrapper는 포함
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Heap Dump
+*.hprof
+
+######################
+# Windows 관련
+######################
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+######################
+# macOS 관련
+######################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+*.icloud
+
+######################
+# NetBeans
+######################
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+######################
+# Spring Tool Suite(STS)
+######################
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!src/**/bin/
+
+######################
+# OS + 툴 + 빌드 불필요 파일 종합
+######################
+HELP.md
+
+
+######################
+# Spring Config
+# 환경별 설정은 보안/민감성 때문에 Git 제외
+######################
+application.properties
+application.yml
+application*.yml
+
+
+######################
+# 보안 및 중요 파일
+######################
+.env
+.env.*
+
+######################
+# 신고 연동 google sheets key
+######################
+/src/main/resources/google-credentials.json

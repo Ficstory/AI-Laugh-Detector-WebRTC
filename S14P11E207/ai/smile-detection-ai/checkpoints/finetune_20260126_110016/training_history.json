@@ -1,0 +1,23 @@
+{
+  "train_loss": [
+    21.037750816345216
+  ],
+  "train_head1_loss": [
+    21.037750816345216
+  ],
+  "train_head2_loss": [
+    0.0
+  ],
+  "val_loss": [
+    13.347756147384644
+  ],
+  "val_head1_loss": [
+    13.347756147384644
+  ],
+  "val_head2_loss": [
+    0.0
+  ],
+  "learning_rate": [
+    5e-05
+  ]
+}

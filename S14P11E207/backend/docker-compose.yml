@@ -1,0 +1,75 @@
+# =============================================================================
+# Backend Application Services - Stateless (배포 시마다 재시작)
+# =============================================================================
+# 사용법:
+#   Production: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   Development: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#   Local: docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+#
+# ⚠️ 주의: DB 서비스는 infra/docker-compose.data.*.yml에서 관리합니다.
+#         먼저 data 서비스가 실행 중이어야 합니다.
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # WAS Blue (Production Blue/Green 배포)
+  # ===========================================================================
+  prod-was-blue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prod-was-app:blue
+    container_name: prod-was-blue
+    restart: always
+    expose:
+      - "8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
+      - SERVER_PORT=8081
+      - SERVER_SSL_ENABLED=false
+      - TZ=Asia/Seoul
+    networks:
+      - prod-net
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  # ===========================================================================
+  # WAS Green (Production Blue/Green 배포)
+  # ===========================================================================
+  prod-was-green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prod-was-app:green
+    container_name: prod-was-green
+    restart: always
+    expose:
+      - "8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
+      - SERVER_PORT=8082
+      - SERVER_SSL_ENABLED=false
+      - TZ=Asia/Seoul
+    networks:
+      - prod-net
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+# =============================================================================
+# Networks - prod-net은 data compose에서 생성, 여기서는 외부 참조
+# =============================================================================
+networks:
+  prod-net:
+    external: true

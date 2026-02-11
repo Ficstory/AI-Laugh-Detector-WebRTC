@@ -1,0 +1,73 @@
+---
+session: smile-detection-portfolio
+date: 2026-01-29
+status: blocked
+outcome: PARTIAL_MINUS
+---
+
+goal: 진짜 파인튜닝 구현 (baseline 가중치 → 한국인 데이터) + MLflow 실험 추적
+now: venv에 PyTorch CUDA 버전 재설치 후 baseline 학습 시작
+test: python -c "import torch; assert torch.cuda.is_available()"
+
+done_this_session:
+  - task: MLflow 통합 완료
+    files: [train.py, scripts/finetune.py, requirements.txt, ai/.gitignore]
+  - task: 자동 데이터셋 다운로드 스크립트 생성
+    files: [scripts/download_datasets.py]
+  - task: 데이터셋 다운로드 완료 (286,561 files)
+    files: [data/raw/genki4k/, data/raw/fer2013/, data/raw/smiles/]
+  - task: 데이터셋 경로 수정
+    files: [train.py]
+  - task: finetune.py에 진짜 파인튜닝 구현 (가중치 로드)
+    files: [scripts/finetune.py]
+
+blockers:
+  - venv PyTorch가 CPU 버전으로 설치됨 (CUDA 미지원)
+  - "AssertionError: Torch not compiled with CUDA enabled" 에러 발생
+  - GPU(RTX 4050) 있지만 사용 불가
+
+questions:
+  - Baseline 학습 시간은 얼마나 걸릴까? (30 epochs, GPU 사용 시)
+  - 파인튜닝 epochs는 10개가 적절한가?
+
+decisions:
+  - mlflow_integration: MLflow로 baseline과 finetuning 실험을 별도 experiment로 분리 추적
+  - real_finetuning: finetune.py의 load_baseline_model()을 수정하여 baseline_pretrained.pth 가중치 로드
+  - dataset_download: Kaggle CLI 기반 자동 다운로드 스크립트 작성
+  - smiles_path: SMILES 경로는 data/raw/smiles/smiles (중첩 구조)
+
+findings:
+  - existing_model_was_scratch: 기존 checkpoints/best_model.pth는 파인튜닝이 아닌 from scratch 학습
+  - no_baseline_weights: Baseline PyTorch 모델 가중치(.pth)가 없었음, ONNX만 존재
+  - datasets_downloaded: GENKI-4K(4k), FER2013(35.8k), SMILES(246k) 다운로드 완료
+  - venv_cpu_pytorch: venv의 PyTorch는 CPU 버전, 시스템 Python은 CUDA 지원
+
+worked:
+  - MLflow 통합 (파라미터, 메트릭, 아티팩트 자동 로깅)
+  - Kaggle CLI로 데이터셋 자동 다운로드
+  - train.py 경로 수정 (상대 경로 → 프로젝트 루트 기준)
+  - finetune.py에 baseline_pth 파라미터 추가
+
+failed:
+  - WSL에서 pip install 시도 (externally-managed-environment 에러)
+  - 백그라운드 학습 시도 (로그 파일 충돌)
+  - venv에서 GPU 학습 시도 (CPU-only PyTorch)
+
+next:
+  - venv에 PyTorch CUDA 12.1 버전 재설치 (pip uninstall torch → pip install torch --index-url https://download.pytorch.org/whl/cu121)
+  - Baseline 학습 실행 (python train.py --device cuda, 30 epochs)
+  - best_model.pth → baseline_pretrained.pth 백업
+  - 한국인 데이터로 진짜 파인튜닝 (python scripts/finetune.py --lr 1e-4 --epochs 10)
+  - MLflow UI로 실험 비교 (mlflow ui)
+
+files:
+  created:
+    - scripts/download_datasets.py
+    - data/raw/genki4k/ (4,000 images)
+    - data/raw/fer2013/ (35,887 images)
+    - data/raw/smiles/ (246,674 images)
+  modified:
+    - train.py (MLflow 추가, 경로 수정, config.yaml 절대 경로)
+    - scripts/finetune.py (MLflow 추가, load_baseline_model에 가중치 로드)
+    - requirements.txt (mlflow>=2.9.0)
+    - ai/.gitignore (mlruns/, mlartifacts/)

@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-01-26T11:36:42.612964",
+  "config": {
+    "backbone": "mobilenet_v3_small",
+    "pretrained": true,
+    "freeze_backbone": false,
+    "cnn": {
+      "output_features": 256,
+      "dropout": 0.3
+    },
+    "lstm": {
+      "hidden_size": 128,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "bidirectional": true
+    },
+    "head1": {
+      "hidden_units": [
+        64
+      ],
+      "dropout": 0.5
+    },
+    "head2": {
+      "num_classes": 7,
+      "hidden_units": [
+        128,
+        64
+      ],
+      "dropout": 0.5
+    }
+  },
+  "training": {
+    "epochs": 30,
+    "batch_size": 4,
+    "learning_rate": 5e-05,
+    "device": "cpu",
+    "val_split": 0.1,
+    "train_samples": 170,
+    "val_samples": 19
+  },
+  "best_val_loss": 0.0011278959224000572,
+  "final_metrics": {
+    "train_loss": 0.6944988419086575,
+    "val_loss": 0.0011278959224000572
+  }
+}

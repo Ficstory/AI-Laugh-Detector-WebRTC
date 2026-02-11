@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .protocol {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .step {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .step::after {
+            content: '→';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            font-size: 18px;
+        }
+        .step:last-child::after {
+            display: none;
+        }
+        .step-num {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .step h3 {
+            font-size: 14px;
+            margin: 0 0 10px;
+        }
+        .step p {
+            font-size: 12px;
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .sequence {
+            border: 1px solid #ddd;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .sequence h3 {
+            font-size: 14px;
+            margin: 0 0 20px;
+            font-weight: 500;
+        }
+        .frames {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .frame {
+            width: 70px;
+            height: 70px;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .frame.highlight {
+            border: 2px solid #333;
+            background: #f8f9fa;
+        }
+        .frame .emoji {
+            font-size: 24px;
+        }
+        .frame .label {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+        }
+        .result {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .stat .value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .stat .label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Baseline 데이터 녹화 프로토콜</h1>
+
+    <div class="protocol">
+        <div class="step">
+            <div class="step-num">Step 1</div>
+            <h3>피험자 준비</h3>
+            <p>웹캠 앞 정면 착석<br>조명 환경 확인</p>
+        </div>
+        <div class="step">
+            <div class="step-num">Step 2</div>
+            <h3>표정 연기</h3>
+            <p>중립 → 미소 전환<br>~5초 유지</p>
+        </div>
+        <div class="step">
+            <div class="step-num">Step 3</div>
+            <h3>연속 촬영</h3>
+            <p>5프레임 시퀀스<br>자연스러운 전환</p>
+        </div>
+        <div class="step">
+            <div class="step-num">Step 4</div>
+            <h3>라벨링</h3>
+            <p>Smile / Non-Smile<br>시퀀스 단위</p>
+        </div>
+    </div>
+
+    <div class="sequence">
+        <h3>5프레임 시퀀스 예시 (Smile Label)</h3>
+        <div class="frames">
+            <div class="frame">
+                <span class="emoji">😐</span>
+                <span class="label">Frame 1</span>
+            </div>
+            <div class="frame">
+                <span class="emoji">🙂</span>
+                <span class="label">Frame 2</span>
+            </div>
+            <div class="frame">
+                <span class="emoji">😊</span>
+                <span class="label">Frame 3</span>
+            </div>
+            <div class="frame highlight">
+                <span class="emoji">😄</span>
+                <span class="label">Frame 4</span>
+            </div>
+            <div class="frame highlight">
+                <span class="emoji">😁</span>
+                <span class="label">Frame 5</span>
+            </div>
+        </div>
+        <div class="result">↓ LSTM이 시퀀스 내 웃음 전환 패턴 학습 → Label: Smile</div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="value">189</div>
+            <div class="label">Total Sequences</div>
+        </div>
+        <div class="stat">
+            <div class="value">945</div>
+            <div class="label">Total Images</div>
+        </div>
+        <div class="stat">
+            <div class="value">50:50</div>
+            <div class="label">Class Balance</div>
+        </div>
+        <div class="stat">
+            <div class="value">5</div>
+            <div class="label">Frames/Sequence</div>
+        </div>
+    </div>
+</body>
+</html>

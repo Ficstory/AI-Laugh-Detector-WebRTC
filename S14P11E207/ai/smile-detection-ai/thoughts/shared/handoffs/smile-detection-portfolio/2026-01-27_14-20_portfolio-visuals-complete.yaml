@@ -1,0 +1,72 @@
+---
+session: smile-detection-portfolio
+date: 2026-01-27
+status: complete
+outcome: PARTIAL_PLUS
+---
+
+goal: 양한빈 AI 엔지니어 포트폴리오 시각자료 생성 완료
+now: 브라우저에서 HTML 스크린샷 후 노션에 업로드
+test: ls docs/img/*.png docs/img/*.html | wc -l  # 18 files expected
+
+done_this_session:
+  - task: 10 Epochs 파인튜닝 모델 배포 (threshold 0.2820)
+    files: [checkpoints/best_model.pth, api/services/model_service.py, config.yaml]
+  - task: matplotlib 차트 9개 생성
+    files: [docs/img/generate_charts.py, docs/img/*.png]
+  - task: HTML 다이어그램 7개 생성 (깔끔한 보고서 스타일)
+    files: [docs/img/*.html]
+  - task: 포트폴리오 문서 작성
+    files: [docs/PORTFOLIO_양한빈.md, docs/img/IMAGE_SPECS.md]
+
+blockers: []
+
+questions: []
+
+decisions:
+  - clean_design: 사용자가 그라데이션 배경 거부 → 흰색 배경 + 검정/회색 보고서 스타일로 변경
+  - windows_python: WSL matplotlib 미설치 → Windows Python으로 차트 생성
+
+findings:
+  - 10_epochs_optimal: A/B 테스트 결과 10 epochs가 72.5% 정확도로 최적 (baseline 65%)
+  - valloss_paradox: 낮은 Val Loss ≠ 좋은 일반화 (소규모 데이터셋 특성)
+  - threshold_optimization: 0.8659 → 0.2820으로 threshold 정규화 필요
+
+worked:
+  - Windows Python (powershell.exe)으로 matplotlib 실행
+  - 깔끔한 보고서 스타일 HTML (흰색 배경, 얇은 테두리)
+
+failed:
+  - WSL에서 pip install matplotlib 실패 (externally-managed-environment)
+  - venv 생성 실패 (python3-venv 미설치)
+
+next:
+  - HTML 파일들을 브라우저에서 열고 스크린샷
+  - PNG 차트 + HTML 스크린샷을 노션에 업로드
+  - 포트폴리오 문서 최종 정리
+
+files:
+  created:
+    - docs/img/generate_charts.py
+    - docs/img/accuracy_comparison.png
+    - docs/img/baseline_metrics.png
+    - docs/img/baseline_confusion.png
+    - docs/img/final_confusion.png
+    - docs/img/valloss_paradox.png
+    - docs/img/final_comparison.png
+    - docs/img/epoch_curve.png
+    - docs/img/latency_comparison.png
+    - docs/img/dataset_distribution.png
+    - docs/img/team_structure.html
+    - docs/img/model_architecture.html
+    - docs/img/recording_protocol.html
+    - docs/img/finetuning_strategy.html
+    - docs/img/frontend_architecture.html
+    - docs/img/achievements.html
+    - docs/img/tech_stack.html
+  modified:
+    - checkpoints/best_model.pth
+    - api/services/model_service.py
+    - config.yaml
+    - test_webcam.py
+    - docs/PORTFOLIO_양한빈.md

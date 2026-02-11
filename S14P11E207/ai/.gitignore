@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# PyTorch
+*.pth
+*.pt
+
+# Data
+**/data/raw/*
+**/data/processed/*
+**/data/collected/*
+**/data/eval/*
+**/data/evaluation/*
+!**/data/raw/.gitkeep
+!**/data/processed/.gitkeep
+!**/data/collected/.gitkeep
+!**/data/eval/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Checkpoints
+checkpoints/*.pth
+!checkpoints/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kaggle
+.kaggle/
+
+# TensorBoard
+runs/
+logs/tensorboard/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Temporary files
+tmpclaude*
+*.tmp
+
+# Large binary files in docs
+docs/*.zip
+docs/*.html
+

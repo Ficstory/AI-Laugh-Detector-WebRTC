@@ -1,0 +1,110 @@
+# 웃음 감지 모델 설정 파일
+
+# 데이터셋 설정
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  image_size: [224, 224]
+  sequence_length: 1  # LSTM에 입력할 프레임 수 (약 0.33초 @ 30fps)
+
+# 모델 설정
+model:
+  version: "1.0.0"
+  name: "DualHeadSmileCNN_LSTM"
+  backbone: "mobilenet_v3_small"  # mobilenet_v3_small, mobilenet_v3_large, efficientnet_b0
+  pretrained: true
+  freeze_backbone: false  # False면 전체 fine-tuning
+
+  # CNN 설정
+  cnn:
+    output_features: 256
+    dropout: 0.3
+
+  # LSTM 설정
+  lstm:
+    hidden_size: 128
+    num_layers: 2
+    dropout: 0.2
+    bidirectional: true
+
+  # Head 1: 웃음 감지 (Binary Classification)
+  head1:
+    hidden_units: [64]
+    dropout: 0.5
+
+  # Head 2: 표정 분류 (Multi-class Classification)
+  head2:
+    num_classes: 7  # Neutral, Anger, Disgust, Fear, Happiness, Sadness, Surprise
+    hidden_units: [128, 64]
+    dropout: 0.5
+    class_names:
+      - "중립 (Neutral)"
+      - "분노 (Anger)"
+      - "혐오 (Disgust)"
+      - "공포 (Fear)"
+      - "행복 (Happiness)"
+      - "슬픔 (Sadness)"
+      - "놀람 (Surprise)"
+
+  # 기존 classifier (하위 호환성)
+  classifier:
+    hidden_units: [64]
+    dropout: 0.5
+
+# 학습 설정
+training:
+  batch_size: 32
+  epochs: 30
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adam"  # adam, sgd, adamw
+  scheduler: "cosine"  # cosine, step, plateau
+
+  # Early Stopping
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+
+  # 체크포인트
+  checkpoint_dir: "checkpoints"
+  save_best_only: true
+
+  # Multi-task Loss 설정
+  loss:
+    head1_weight: 1.0  # Head 1 (Smile) Loss 가중치
+    head2_weight: 1.0  # Head 2 (Emotion) Loss 가중치
+    focal_loss: false  # Focal Loss 사용 여부 (클래스 불균형 시 true)
+    focal_gamma: 2.0   # Focal Loss gamma 파라미터
+    label_smoothing: 0.1  # Label Smoothing (과적합 방지)
+    adaptive: false  # 적응형 가중치 (자동 조정)
+
+  # 데이터 증강
+  augmentation:
+    horizontal_flip: 0.5
+    rotation_range: 15
+    brightness_range: [0.8, 1.2]
+    zoom_range: [0.9, 1.1]
+
+# 추론 설정
+inference:
+  model_path: "models/best_model.pth"
+  smile_threshold: 0.2820  # 10 Epochs 파인튜닝 모델 최적 threshold
+  emotion_threshold: 0.3  # 표정 판정 최소 확률
+  smoothing_window: 5  # 결과를 스무딩할 프레임 수
+  device: "cuda"  # cuda 또는 cpu
+
+# API 서버 설정
+api:
+  host: "0.0.0.0"
+  port: 8000
+  max_connections: 100
+  fps: 30
+
+# 로깅
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  tensorboard_dir: "logs/tensorboard"

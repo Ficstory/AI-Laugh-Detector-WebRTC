@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="ko" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웃음참기 배틀 - Wireframe &amp; Mockup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&amp;family=Noto+Sans+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    * { font-family: 'Noto Sans KR', sans-serif; }
+    .title-font { font-family: 'Black Han Sans', sans-serif; }
+    .page-preview { transition: all 0.3s ease; }
+    .page-preview:hover { transform: scale(1.02); }
+    .nav-item { transition: all 0.2s ease; }
+    .nav-item:hover { background: rgba(255,255,255,0.1); }
+    .nav-item.active { background: linear-gradient(90deg, #FF6B35 0%, #FF8C42 100%); }
+    .glow { box-shadow: 0 0 30px rgba(255,107,53,0.3); }
+    .card-hover:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1a2e; }
+    ::-webkit-scrollbar-thumb { background: #FF6B35; border-radius: 4px; }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white overflow-auto">
+  <div id="app" class="h-full flex flex-col"><!-- Header -->
+   <header class="flex-shrink-0 bg-black/40 backdrop-blur-lg border-b border-white/10 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-400 rounded-xl flex items-center justify-center text-2xl">
+       😂
+      </div>
+      <h1 id="main-title" class="title-font text-2xl bg-gradient-to-r from-orange-400 to-yellow-300 bg-clip-text text-transparent">웃음참기 배틀</h1>
+     </div>
+     <div class="flex items-center gap-2 text-sm text-gray-400"><span class="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-xs font-medium">WIREFRAME</span> <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-xs font-medium">MOCKUP</span>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <div class="flex-1 flex overflow-hidden"><!-- Sidebar Navigation -->
+    <nav class="w-64 flex-shrink-0 bg-black/30 backdrop-blur border-r border-white/10 p-4 overflow-y-auto">
+     <div class="space-y-2">
+      <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">페이지 목록</p><button onclick="showPage('landing')" class="nav-item active w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="landing"> <span class="text-xl">🏠</span> <span class="text-sm font-medium">랜딩 페이지</span> </button> <button onclick="showPage('login')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="login"> <span class="text-xl">🔐</span> <span class="text-sm font-medium">로그인</span> </button> <button onclick="showPage('signup')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="signup"> <span class="text-xl">📝</span> <span class="text-sm font-medium">회원가입</span> </button> <button onclick="showPage('profile')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="profile"> <span class="text-xl">👤</span> <span class="text-sm font-medium">프로필</span> </button> <button onclick="showPage('lobby')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="lobby"> <span class="text-xl">🎮</span> <span class="text-sm font-medium">로비 / 매칭방</span> </button> <button onclick="showPage('battle1v1')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="battle1v1"> <span class="text-xl">⚔️</span> <span class="text-sm font-medium">1:1 배틀</span> </button> <button onclick="showPage('battle2v2')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="battle2v2"> <span class="text-xl">👥</span> <span class="text-sm font-medium">2:2+ 팀 배틀</span> </button> <button onclick="showPage('highlights')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="highlights"> <span class="text-xl">🎬</span> <span class="text-sm font-medium">하이라이트</span> </button> <button onclick="showPage('leaderboard')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="leaderboard"> <span class="text-xl">🏆</span> <span class="text-sm font-medium">리더보드</span> </button> <button onclick="showPage('settings')" class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3" data-page="settings"> <span class="text-xl">⚙️</span> <span class="text-sm font-medium">설정</span> </button>
+     </div>
+     <div class="mt-8 p-4 bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/30">
+      <p class="text-xs text-orange-300 font-medium mb-2">📋 총 10개 페이지</p>
+      <p class="text-xs text-gray-400">좌측 메뉴에서 각 페이지의 와이어프레임을 확인하세요</p>
+     </div>
+    </nav><!-- Page Content Area -->
+    <main class="flex-1 overflow-y-auto p-8">
+     <div id="page-content" class="max-w-6xl mx-auto"><!-- Landing Page -->
+      <div id="page-landing" class="page-section">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">🏠 랜딩 페이지 (메인)</h2>
+        <p class="text-gray-400">첫 방문자가 보게 되는 메인 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover"><!-- Mockup Preview -->
+        <div class="p-8 bg-gradient-to-br from-slate-900 to-purple-900">
+         <div class="max-w-4xl mx-auto text-center"><!-- Logo -->
+          <div class="mb-8">
+           <div class="w-24 h-24 mx-auto bg-gradient-to-br from-orange-500 to-yellow-400 rounded-3xl flex items-center justify-center text-5xl mb-4 glow">
+            😂
+           </div>
+           <h1 class="title-font text-5xl bg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 bg-clip-text text-transparent mb-2">웃음참기 배틀</h1>
+           <p class="text-gray-400 text-lg">웃으면 지는 거야! 실시간 1:1 &amp; 팀 대결</p>
+          </div><!-- Auth Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8"><button class="px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl font-bold text-lg hover:scale-105 transition-transform"> 🎮 지금 시작하기 </button> <button class="px-8 py-4 bg-white/10 border border-white/20 rounded-xl font-medium hover:bg-white/20 transition"> 로그인 </button>
+          </div><!-- OAuth Options -->
+          <div class="flex justify-center gap-4 mb-12"><button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition">
+            <svg class="w-6 h-6" viewbox="0 0 24 24">
+             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg></button> <button class="w-12 h-12 bg-[#5865F2] rounded-full flex items-center justify-center hover:scale-110 transition">
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24">
+             <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+            </svg></button> <button class="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:scale-110 transition border border-white/20">
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24">
+             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg></button> <button class="w-12 h-12 bg-[#FEE500] rounded-full flex items-center justify-center hover:scale-110 transition">
+            <svg class="w-6 h-6" viewbox="0 0 24 24">
+             <path fill="#3C1E1E" d="M12 3c-5.52 0-10 3.59-10 8 0 2.81 1.86 5.27 4.66 6.67-.15.79-.84 3.53-.87 3.8 0 0-.02.18.09.25.11.07.24.02.24.02.31-.04 3.64-2.37 4.21-2.78.55.08 1.11.12 1.67.12 5.52 0 10-3.59 10-8s-4.48-8-10-8z" />
+            </svg></button>
+          </div><!-- Features -->
+          <div class="grid grid-cols-3 gap-6 text-center">
+           <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-3xl mb-2">
+             ⚡
+            </div>
+            <h3 class="font-bold mb-1">실시간 대결</h3>
+            <p class="text-sm text-gray-400">WebRTC 기반 저지연</p>
+           </div>
+           <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-3xl mb-2">
+             🎭
+            </div>
+            <h3 class="font-bold mb-1">AI 표정 분석</h3>
+            <p class="text-sm text-gray-400">웃음 감지 시스템</p>
+           </div>
+           <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-3xl mb-2">
+             🏆
+            </div>
+            <h3 class="font-bold mb-1">랭킹 시스템</h3>
+            <p class="text-sm text-gray-400">글로벌 리더보드</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Login Page -->
+      <div id="page-login" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">🔐 로그인 페이지</h2>
+        <p class="text-gray-400">기존 회원의 로그인 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-8 bg-gradient-to-br from-slate-900 to-purple-900 min-h-96 flex items-center justify-center">
+         <div class="w-full max-w-md">
+          <div class="text-center mb-8">
+           <div class="w-16 h-16 mx-auto bg-gradient-to-br from-orange-500 to-yellow-400 rounded-2xl flex items-center justify-center text-3xl mb-4">
+            😂
+           </div>
+           <h2 class="title-font text-3xl text-white mb-2">다시 오셨네요!</h2>
+           <p class="text-gray-400">계정에 로그인하세요</p>
+          </div>
+          <div class="space-y-4">
+           <div><label class="block text-sm text-gray-400 mb-2">이메일</label> <input type="email" placeholder="your@email.com" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+           </div>
+           <div><label class="block text-sm text-gray-400 mb-2">비밀번호</label> <input type="password" placeholder="••••••••" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+           </div>
+           <div class="flex items-center justify-between text-sm"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded"> <span class="text-gray-400">로그인 유지</span> </label> <a href="#" class="text-orange-400 hover:underline">비밀번호 찾기</a>
+           </div><button class="w-full py-4 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform"> 로그인 </button>
+          </div>
+          <div class="relative my-6">
+           <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-white/20"></div>
+           </div>
+           <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-slate-900 text-gray-400">또는</span>
+           </div>
+          </div>
+          <div class="grid grid-cols-4 gap-3"><button class="p-3 bg-white rounded-xl hover:scale-105 transition">
+            <svg class="w-6 h-6 mx-auto" viewbox="0 0 24 24">
+             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg></button> <button class="p-3 bg-[#5865F2] rounded-xl hover:scale-105 transition">
+            <svg class="w-6 h-6 mx-auto text-white" fill="currentColor" viewbox="0 0 24 24">
+             <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+            </svg></button> <button class="p-3 bg-black rounded-xl hover:scale-105 transition border border-white/20">
+            <svg class="w-6 h-6 mx-auto text-white" fill="currentColor" viewbox="0 0 24 24">
+             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg></button> <button class="p-3 bg-[#FEE500] rounded-xl hover:scale-105 transition">
+            <svg class="w-6 h-6 mx-auto" viewbox="0 0 24 24">
+             <path fill="#3C1E1E" d="M12 3c-5.52 0-10 3.59-10 8 0 2.81 1.86 5.27 4.66 6.67-.15.79-.84 3.53-.87 3.8 0 0-.02.18.09.25.11.07.24.02.24.02.31-.04 3.64-2.37 4.21-2.78.55.08 1.11.12 1.67.12 5.52 0 10-3.59 10-8s-4.48-8-10-8z" />
+            </svg></button>
+          </div>
+          <p class="text-center text-gray-400 mt-6">계정이 없으신가요? <a href="#" class="text-orange-400 hover:underline">회원가입</a></p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Signup Page -->
+      <div id="page-signup" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">📝 회원가입 페이지</h2>
+        <p class="text-gray-400">신규 회원 가입 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-8 bg-gradient-to-br from-slate-900 to-purple-900">
+         <div class="max-w-lg mx-auto">
+          <div class="text-center mb-8">
+           <div class="w-16 h-16 mx-auto bg-gradient-to-br from-orange-500 to-yellow-400 rounded-2xl flex items-center justify-center text-3xl mb-4">
+            🎉
+           </div>
+           <h2 class="title-font text-3xl text-white mb-2">환영합니다!</h2>
+           <p class="text-gray-400">웃음참기 배틀에 참여하세요</p>
+          </div><!-- Step Indicator -->
+          <div class="flex items-center justify-center gap-2 mb-8">
+           <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-sm font-bold">
+            1
+           </div>
+           <div class="w-12 h-1 bg-white/20 rounded"></div>
+           <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm">
+            2
+           </div>
+           <div class="w-12 h-1 bg-white/20 rounded"></div>
+           <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm">
+            3
+           </div>
+          </div>
+          <div class="space-y-4">
+           <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm text-gray-400 mb-2">닉네임</label> <input type="text" placeholder="닉네임 입력" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">생년월일</label> <input type="date" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+            </div>
+           </div>
+           <div><label class="block text-sm text-gray-400 mb-2">이메일</label> <input type="email" placeholder="your@email.com" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+           </div>
+           <div><label class="block text-sm text-gray-400 mb-2">비밀번호</label> <input type="password" placeholder="8자 이상 입력" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+            <div class="flex gap-1 mt-2">
+             <div class="h-1 flex-1 bg-orange-500 rounded"></div>
+             <div class="h-1 flex-1 bg-orange-500 rounded"></div>
+             <div class="h-1 flex-1 bg-white/20 rounded"></div>
+             <div class="h-1 flex-1 bg-white/20 rounded"></div>
+            </div>
+           </div>
+           <div><label class="block text-sm text-gray-400 mb-2">비밀번호 확인</label> <input type="password" placeholder="비밀번호 재입력" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:border-orange-500 focus:outline-none">
+           </div>
+           <div class="space-y-3 pt-4"><label class="flex items-center gap-3 cursor-pointer"> <input type="checkbox" class="w-5 h-5 rounded border-2 border-white/30"> <span class="text-sm text-gray-300">[필수] 서비스 이용약관에 동의합니다</span> </label> <label class="flex items-center gap-3 cursor-pointer"> <input type="checkbox" class="w-5 h-5 rounded border-2 border-white/30"> <span class="text-sm text-gray-300">[필수] 개인정보 처리방침에 동의합니다</span> </label> <label class="flex items-center gap-3 cursor-pointer"> <input type="checkbox" class="w-5 h-5 rounded border-2 border-white/30"> <span class="text-sm text-gray-300">[선택] 마케팅 정보 수신에 동의합니다</span> </label>
+           </div><button class="w-full py-4 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform mt-6"> 계정 만들기 </button>
+          </div>
+          <div class="relative my-6">
+           <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-white/20"></div>
+           </div>
+           <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-slate-900 text-gray-400">SNS로 빠른 가입</span>
+           </div>
+          </div>
+          <div class="grid grid-cols-4 gap-3"><button class="p-3 bg-white rounded-xl hover:scale-105 transition flex items-center justify-center"> <span class="text-sm font-medium text-gray-700">Google</span> </button> <button class="p-3 bg-[#5865F2] rounded-xl hover:scale-105 transition flex items-center justify-center"> <span class="text-sm font-medium text-white">Discord</span> </button> <button class="p-3 bg-black rounded-xl hover:scale-105 transition border border-white/20 flex items-center justify-center"> <span class="text-sm font-medium text-white">GitHub</span> </button> <button class="p-3 bg-[#FEE500] rounded-xl hover:scale-105 transition flex items-center justify-center"> <span class="text-sm font-medium text-gray-800">Kakao</span> </button>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Profile Page -->
+      <div id="page-profile" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">👤 프로필 페이지</h2>
+        <p class="text-gray-400">사용자 프로필 작성 및 확인 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-8 bg-gradient-to-br from-slate-900 to-purple-900">
+         <div class="max-w-4xl mx-auto"><!-- Profile Header -->
+          <div class="flex flex-col md:flex-row items-center gap-8 mb-8 p-6 bg-white/5 rounded-2xl">
+           <div class="relative">
+            <div class="w-32 h-32 bg-gradient-to-br from-orange-500 to-yellow-400 rounded-full flex items-center justify-center text-6xl">
+             😎
+            </div><button class="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-lg">📷</button>
+            <div class="absolute -top-2 -right-2 px-2 py-1 bg-orange-500 rounded-full text-xs font-bold">
+             Lv.42
+            </div>
+           </div>
+           <div class="text-center md:text-left flex-1">
+            <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+             <h2 class="title-font text-3xl">웃음지존킹</h2><span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">🏆 골드</span>
+            </div>
+            <p class="text-gray-400 mb-4">웃기면 안 돼! 나는 철벽 표정!</p>
+            <div class="flex flex-wrap justify-center md:justify-start gap-4">
+             <div class="text-center">
+              <p class="text-2xl font-bold text-orange-400">1,234</p>
+              <p class="text-xs text-gray-400">총 경기</p>
+             </div>
+             <div class="text-center">
+              <p class="text-2xl font-bold text-green-400">78%</p>
+              <p class="text-xs text-gray-400">승률</p>
+             </div>
+             <div class="text-center">
+              <p class="text-2xl font-bold text-purple-400">256</p>
+              <p class="text-xs text-gray-400">연승 기록</p>
+             </div>
+             <div class="text-center">
+              <p class="text-2xl font-bold text-yellow-400">#42</p>
+              <p class="text-xs text-gray-400">전체 순위</p>
+             </div>
+            </div>
+           </div><button class="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"> ✏️ 프로필 수정 </button>
+          </div><!-- Profile Content Grid -->
+          <div class="grid md:grid-cols-2 gap-6"><!-- Edit Section -->
+           <div class="space-y-4">
+            <h3 class="text-lg font-bold flex items-center gap-2">📝 프로필 정보</h3>
+            <div class="p-4 bg-white/5 rounded-xl space-y-4">
+             <div><label class="block text-sm text-gray-400 mb-2">닉네임</label> <input type="text" value="웃음지존킹" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl">
+             </div>
+             <div><label class="block text-sm text-gray-400 mb-2">자기소개</label> <textarea rows="3" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl resize-none">웃기면 안 돼! 나는 철벽 표정!</textarea>
+             </div>
+             <div><label class="block text-sm text-gray-400 mb-2">대표 이모지</label>
+              <div class="flex gap-2"><button class="w-12 h-12 bg-orange-500/30 border-2 border-orange-500 rounded-xl text-2xl">😎</button> <button class="w-12 h-12 bg-white/10 border border-white/20 rounded-xl text-2xl hover:border-orange-500">😂</button> <button class="w-12 h-12 bg-white/10 border border-white/20 rounded-xl text-2xl hover:border-orange-500">🤣</button> <button class="w-12 h-12 bg-white/10 border border-white/20 rounded-xl text-2xl hover:border-orange-500">😁</button> <button class="w-12 h-12 bg-white/10 border border-white/20 rounded-xl text-2xl hover:border-orange-500">+</button>
+              </div>
+             </div>
+            </div>
+           </div><!-- Stats & Achievements -->
+           <div class="space-y-4">
+            <h3 class="text-lg font-bold flex items-center gap-2">🏅 업적</h3>
+            <div class="p-4 bg-white/5 rounded-xl">
+             <div class="grid grid-cols-4 gap-3">
+              <div class="text-center p-3 bg-yellow-500/20 rounded-xl">
+               <div class="text-2xl mb-1">
+                🥇
+               </div>
+               <p class="text-xs text-gray-300">첫 승리</p>
+              </div>
+              <div class="text-center p-3 bg-orange-500/20 rounded-xl">
+               <div class="text-2xl mb-1">
+                🔥
+               </div>
+               <p class="text-xs text-gray-300">10연승</p>
+              </div>
+              <div class="text-center p-3 bg-purple-500/20 rounded-xl">
+               <div class="text-2xl mb-1">
+                💎
+               </div>
+               <p class="text-xs text-gray-300">100승</p>
+              </div>
+              <div class="text-center p-3 bg-white/10 rounded-xl opacity-50">
+               <div class="text-2xl mb-1">
+                🔒
+               </div>
+               <p class="text-xs text-gray-400">???</p>
+              </div>
+             </div>
+            </div>
+            <h3 class="text-lg font-bold flex items-center gap-2">📊 최근 전적</h3>
+            <div class="p-4 bg-white/5 rounded-xl space-y-2">
+             <div class="flex items-center justify-between p-2 bg-green-500/20 rounded-lg"><span class="text-green-400 font-bold">승리</span> <span class="text-sm text-gray-300">vs 웃음초보</span> <span class="text-xs text-gray-400">5분 전</span>
+             </div>
+             <div class="flex items-center justify-between p-2 bg-green-500/20 rounded-lg"><span class="text-green-400 font-bold">승리</span> <span class="text-sm text-gray-300">vs 참을래매!</span> <span class="text-xs text-gray-400">12분 전</span>
+             </div>
+             <div class="flex items-center justify-between p-2 bg-red-500/20 rounded-lg"><span class="text-red-400 font-bold">패배</span> <span class="text-sm text-gray-300">vs 철면피킹</span> <span class="text-xs text-gray-400">1시간 전</span>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Lobby Page -->
+      <div id="page-lobby" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">🎮 로비 / 매칭방 페이지</h2>
+        <p class="text-gray-400">매칭방을 만들고 참여할 수 있는 로비 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-6 bg-gradient-to-br from-slate-900 to-purple-900"><!-- Quick Match -->
+         <div class="grid md:grid-cols-2 gap-4 mb-6"><button class="p-6 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl text-left hover:scale-[1.02] transition-transform">
+           <div class="flex items-center gap-4">
+            <div class="text-4xl">
+             ⚡
+            </div>
+            <div>
+             <h3 class="text-xl font-bold">빠른 매칭</h3>
+             <p class="text-white/80">자동으로 상대를 찾아드려요</p>
+            </div>
+           </div></button> <button class="p-6 bg-white/10 border border-white/20 rounded-2xl text-left hover:bg-white/20 transition">
+           <div class="flex items-center gap-4">
+            <div class="text-4xl">
+             ➕
+            </div>
+            <div>
+             <h3 class="text-xl font-bold">방 만들기</h3>
+             <p class="text-gray-400">친구와 함께 플레이하세요</p>
+            </div>
+           </div></button>
+         </div><!-- Room List -->
+         <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold">🏠 대기중인 방 목록</h3>
+          <div class="flex gap-2"><button class="px-3 py-1 bg-orange-500 rounded-full text-sm">전체</button> <button class="px-3 py-1 bg-white/10 rounded-full text-sm">1:1</button> <button class="px-3 py-1 bg-white/10 rounded-full text-sm">팀전</button>
+          </div>
+         </div>
+         <div class="space-y-3"><!-- Room Card -->
+          <div class="p-4 bg-white/5 rounded-xl border border-white/10 hover:border-orange-500/50 transition cursor-pointer">
+           <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+             <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-400 rounded-xl flex items-center justify-center text-2xl">
+              😂
+             </div>
+             <div>
+              <div class="flex items-center gap-2">
+               <h4 class="font-bold">웃기면 바로 아웃!</h4><span class="px-2 py-0.5 bg-orange-500/30 text-orange-400 text-xs rounded">1:1</span>
+              </div>
+              <p class="text-sm text-gray-400">호스트: 웃음지존킹 • 생성 2분 전</p>
+             </div>
+            </div>
+            <div class="flex items-center gap-4">
+             <div class="text-center">
+              <p class="text-lg font-bold text-orange-400">1/2</p>
+              <p class="text-xs text-gray-400">참가자</p>
+             </div><button class="px-4 py-2 bg-orange-500 rounded-xl font-medium hover:bg-orange-600 transition">입장</button>
+            </div>
+           </div>
+          </div>
+          <div class="p-4 bg-white/5 rounded-xl border border-white/10 hover:border-purple-500/50 transition cursor-pointer">
+           <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+             <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-400 rounded-xl flex items-center justify-center text-2xl">
+              👥
+             </div>
+             <div>
+              <div class="flex items-center gap-2">
+               <h4 class="font-bold">팀전 고수만!</h4><span class="px-2 py-0.5 bg-purple-500/30 text-purple-400 text-xs rounded">2:2</span> <span class="px-2 py-0.5 bg-yellow-500/30 text-yellow-400 text-xs rounded">🔒 비밀방</span>
+              </div>
+              <p class="text-sm text-gray-400">호스트: 철면피킹 • 생성 5분 전</p>
+             </div>
+            </div>
+            <div class="flex items-center gap-4">
+             <div class="text-center">
+              <p class="text-lg font-bold text-purple-400">3/4</p>
+              <p class="text-xs text-gray-400">참가자</p>
+             </div><button class="px-4 py-2 bg-purple-500 rounded-xl font-medium hover:bg-purple-600 transition">입장</button>
+            </div>
+           </div>
+          </div>
+          <div class="p-4 bg-white/5 rounded-xl border border-white/10 hover:border-green-500/50 transition cursor-pointer">
+           <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-400 rounded-xl flex items-center justify-center text-2xl">
+              🎯
+             </div>
+             <div>
+              <div class="flex items-center gap-2">
+               <h4 class="font-bold">초보 환영 친선전</h4><span class="px-2 py-0.5 bg-orange-500/30 text-orange-400 text-xs rounded">1:1</span> <span class="px-2 py-0.5 bg-green-500/30 text-green-400 text-xs rounded">🌱 초보</span>
+              </div>
+              <p class="text-sm text-gray-400">호스트: 웃음초보 • 생성 8분 전</p>
+             </div>
+            </div>
+            <div class="flex items-center gap-4">
+             <div class="text-center">
+              <p class="text-lg font-bold text-green-400">1/2</p>
+              <p class="text-xs text-gray-400">참가자</p>
+             </div><button class="px-4 py-2 bg-green-500 rounded-xl font-medium hover:bg-green-600 transition">입장</button>
+            </div>
+           </div>
+          </div>
+         </div><!-- Online Users -->
+         <div class="mt-6 p-4 bg-white/5 rounded-xl">
+          <div class="flex items-center justify-between mb-3"><span class="text-sm text-gray-400">🟢 현재 접속중</span> <span class="text-orange-400 font-bold">1,234명</span>
+          </div>
+          <div class="flex -space-x-2">
+           <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-yellow-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-sm">
+            😎
+           </div>
+           <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-sm">
+            😂
+           </div>
+           <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-sm">
+            🤣
+           </div>
+           <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-sm">
+            😁
+           </div>
+           <div class="w-8 h-8 bg-white/20 rounded-full border-2 border-slate-900 flex items-center justify-center text-xs text-gray-400">
+            +1.2k
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- 1v1 Battle Page -->
+      <div id="page-battle1v1" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">⚔️ 1:1 배틀 페이지</h2>
+        <p class="text-gray-400">실시간 1:1 웃음참기 대결 화면입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="bg-gradient-to-br from-slate-900 to-purple-900"><!-- Battle Header -->
+         <div class="p-4 bg-black/40 border-b border-white/10">
+          <div class="flex items-center justify-between">
+           <div class="flex items-center gap-4"><button class="p-2 bg-white/10 rounded-lg hover:bg-white/20">
+             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+             </svg></button>
+            <div>
+             <p class="text-sm text-gray-400">라운드 3/5</p>
+             <p class="font-bold">1:1 배틀 진행중</p>
+            </div>
+           </div>
+           <div class="flex items-center gap-2">
+            <div class="px-4 py-2 bg-red-500/30 text-red-400 rounded-xl font-bold animate-pulse">
+             ⏱️ 02:34
+            </div><button class="p-2 bg-white/10 rounded-lg hover:bg-white/20">⚙️</button>
+           </div>
+          </div>
+         </div><!-- Battle Area -->
+         <div class="p-6">
+          <div class="grid grid-cols-2 gap-6"><!-- Player 1 -->
+           <div class="relative">
+            <div class="aspect-video bg-gradient-to-br from-blue-900 to-purple-900 rounded-2xl overflow-hidden border-4 border-blue-500">
+             <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center">
+               <div class="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center text-5xl mb-2">
+                😐
+               </div>
+               <p class="text-xl font-bold">나 (웃음지존킹)</p>
+              </div>
+             </div><!-- Emotion Meter -->
+             <div class="absolute bottom-4 left-4 right-4">
+              <div class="flex items-center gap-2 p-2 bg-black/60 rounded-lg"><span class="text-sm">😐</span>
+               <div class="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full w-1/4 bg-gradient-to-r from-green-400 to-yellow-400 rounded-full transition-all"></div>
+               </div><span class="text-sm">😂</span>
+              </div>
+             </div><!-- Live Badge -->
+             <div class="absolute top-4 left-4 px-2 py-1 bg-red-500 rounded text-xs font-bold flex items-center gap-1"><span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> LIVE
+             </div>
+            </div>
+            <div class="mt-3 flex items-center justify-center gap-4 text-center">
+             <div class="px-4 py-2 bg-blue-500/20 rounded-xl">
+              <p class="text-2xl font-bold text-blue-400">2</p>
+              <p class="text-xs text-gray-400">라운드 승</p>
+             </div>
+            </div>
+           </div><!-- VS Divider -->
+           <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-xl font-black shadow-lg glow">
+             VS
+            </div>
+           </div><!-- Player 2 -->
+           <div class="relative">
+            <div class="aspect-video bg-gradient-to-br from-red-900 to-orange-900 rounded-2xl overflow-hidden border-4 border-red-500">
+             <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center">
+               <div class="w-24 h-24 mx-auto bg-gradient-to-br from-red-500 to-orange-400 rounded-full flex items-center justify-center text-5xl mb-2">
+                😆
+               </div>
+               <p class="text-xl font-bold">상대 (참을래매!)</p>
+              </div>
+             </div><!-- Emotion Meter -->
+             <div class="absolute bottom-4 left-4 right-4">
+              <div class="flex items-center gap-2 p-2 bg-black/60 rounded-lg"><span class="text-sm">😐</span>
+               <div class="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full w-3/4 bg-gradient-to-r from-yellow-400 to-red-400 rounded-full transition-all"></div>
+               </div><span class="text-sm">😂</span>
+              </div>
+             </div><!-- Live Badge -->
+             <div class="absolute top-4 left-4 px-2 py-1 bg-red-500 rounded text-xs font-bold flex items-center gap-1"><span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> LIVE
+             </div>
+            </div>
+            <div class="mt-3 flex items-center justify-center gap-4 text-center">
+             <div class="px-4 py-2 bg-red-500/20 rounded-xl">
+              <p class="text-2xl font-bold text-red-400">1</p>
+              <p class="text-xs text-gray-400">라운드 승</p>
+             </div>
+            </div>
+           </div>
+          </div><!-- Action Buttons -->
+          <div class="mt-6 flex justify-center gap-4"><button class="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition flex items-center gap-2"> 🎤 마이크 ON </button> <button class="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition flex items-center gap-2"> 📹 카메라 ON </button> <button class="px-6 py-3 bg-orange-500 rounded-xl font-bold hover:bg-orange-600 transition flex items-center gap-2"> 🎬 하이라이트 저장 </button> <button class="px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/30 transition flex items-center gap-2"> 🚪 나가기 </button>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- 2v2 Battle Page -->
+      <div id="page-battle2v2" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">👥 2:2+ 팀 배틀 페이지</h2>
+        <p class="text-gray-400">팀 단위 웃음참기 대결 화면입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="bg-gradient-to-br from-slate-900 to-purple-900"><!-- Battle Header -->
+         <div class="p-4 bg-black/40 border-b border-white/10">
+          <div class="flex items-center justify-between">
+           <div class="flex items-center gap-4"><button class="p-2 bg-white/10 rounded-lg hover:bg-white/20">←</button>
+            <div>
+             <p class="text-sm text-gray-400">라운드 2/3</p>
+             <p class="font-bold">2:2 팀 배틀</p>
+            </div>
+           </div>
+           <div class="flex items-center gap-6">
+            <div class="text-center">
+             <p class="text-xs text-blue-400">블루팀</p>
+             <p class="text-2xl font-bold text-blue-400">1</p>
+            </div>
+            <div class="px-4 py-2 bg-red-500/30 text-red-400 rounded-xl font-bold">
+             ⏱️ 01:45
+            </div>
+            <div class="text-center">
+             <p class="text-xs text-red-400">레드팀</p>
+             <p class="text-2xl font-bold text-red-400">1</p>
+            </div>
+           </div>
+          </div>
+         </div><!-- Team Battle Area -->
+         <div class="p-6">
+          <div class="grid grid-cols-2 gap-8"><!-- Blue Team -->
+           <div>
+            <div class="text-center mb-4"><span class="px-4 py-1 bg-blue-500 rounded-full font-bold">💙 블루팀</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+             <div class="aspect-video bg-gradient-to-br from-blue-900 to-blue-800 rounded-xl overflow-hidden border-2 border-blue-500 relative">
+              <div class="absolute inset-0 flex items-center justify-center">
+               <div class="text-center">
+                <div class="w-12 h-12 mx-auto bg-blue-500 rounded-full flex items-center justify-center text-2xl">
+                 😐
+                </div>
+                <p class="text-sm font-bold mt-1">나</p>
+               </div>
+              </div>
+              <div class="absolute bottom-2 left-2 right-2 h-2 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-1/5 bg-green-400 rounded-full"></div>
+              </div>
+              <div class="absolute top-2 left-2 px-1.5 py-0.5 bg-red-500 rounded text-xs">
+               LIVE
+              </div>
+             </div>
+             <div class="aspect-video bg-gradient-to-br from-blue-900 to-blue-800 rounded-xl overflow-hidden border-2 border-blue-400 relative">
+              <div class="absolute inset-0 flex items-center justify-center">
+               <div class="text-center">
+                <div class="w-12 h-12 mx-auto bg-blue-400 rounded-full flex items-center justify-center text-2xl">
+                 😊
+                </div>
+                <p class="text-sm font-bold mt-1">팀원1</p>
+               </div>
+              </div>
+              <div class="absolute bottom-2 left-2 right-2 h-2 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-2/5 bg-yellow-400 rounded-full"></div>
+              </div>
+              <div class="absolute top-2 left-2 px-1.5 py-0.5 bg-red-500 rounded text-xs">
+               LIVE
+              </div>
+             </div>
+            </div>
+            <div class="mt-3 p-3 bg-blue-500/20 rounded-xl text-center">
+             <p class="text-sm text-gray-400">팀 평균 웃음 지수</p>
+             <div class="flex items-center justify-center gap-2 mt-1">
+              <div class="flex-1 max-w-32 h-3 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-1/3 bg-green-400 rounded-full"></div>
+              </div><span class="font-bold text-green-400">30%</span>
+             </div>
+            </div>
+           </div><!-- Red Team -->
+           <div>
+            <div class="text-center mb-4"><span class="px-4 py-1 bg-red-500 rounded-full font-bold">❤️ 레드팀</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+             <div class="aspect-video bg-gradient-to-br from-red-900 to-red-800 rounded-xl overflow-hidden border-2 border-red-500 relative">
+              <div class="absolute inset-0 flex items-center justify-center">
+               <div class="text-center">
+                <div class="w-12 h-12 mx-auto bg-red-500 rounded-full flex items-center justify-center text-2xl">
+                 😆
+                </div>
+                <p class="text-sm font-bold mt-1">상대1</p>
+               </div>
+              </div>
+              <div class="absolute bottom-2 left-2 right-2 h-2 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-4/5 bg-red-400 rounded-full"></div>
+              </div>
+              <div class="absolute top-2 left-2 px-1.5 py-0.5 bg-red-500 rounded text-xs">
+               LIVE
+              </div>
+             </div>
+             <div class="aspect-video bg-gradient-to-br from-red-900 to-red-800 rounded-xl overflow-hidden border-2 border-red-400 relative">
+              <div class="absolute inset-0 flex items-center justify-center">
+               <div class="text-center">
+                <div class="w-12 h-12 mx-auto bg-red-400 rounded-full flex items-center justify-center text-2xl">
+                 😁
+                </div>
+                <p class="text-sm font-bold mt-1">상대2</p>
+               </div>
+              </div>
+              <div class="absolute bottom-2 left-2 right-2 h-2 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-3/5 bg-orange-400 rounded-full"></div>
+              </div>
+              <div class="absolute top-2 left-2 px-1.5 py-0.5 bg-red-500 rounded text-xs">
+               LIVE
+              </div>
+             </div>
+            </div>
+            <div class="mt-3 p-3 bg-red-500/20 rounded-xl text-center">
+             <p class="text-sm text-gray-400">팀 평균 웃음 지수</p>
+             <div class="flex items-center justify-center gap-2 mt-1">
+              <div class="flex-1 max-w-32 h-3 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full w-3/4 bg-red-400 rounded-full"></div>
+              </div><span class="font-bold text-red-400">75%</span>
+             </div>
+            </div>
+           </div>
+          </div><!-- Team Chat -->
+          <div class="mt-6 p-4 bg-white/5 rounded-xl">
+           <h4 class="font-bold mb-3 flex items-center gap-2">💬 팀 채팅</h4>
+           <div class="h-24 overflow-y-auto space-y-2 mb-3">
+            <div class="flex items-start gap-2"><span class="text-blue-400 text-sm font-bold">팀원1:</span> <span class="text-sm text-gray-300">버텨! 이기고 있어!</span>
+            </div>
+            <div class="flex items-start gap-2"><span class="text-blue-400 text-sm font-bold">나:</span> <span class="text-sm text-gray-300">ㅋㅋ 참기 힘들어 ㅋㅋ</span>
+            </div>
+           </div>
+           <div class="flex gap-2"><input type="text" placeholder="메시지 입력..." class="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm"> <button class="px-4 py-2 bg-blue-500 rounded-lg">전송</button>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Highlights Page -->
+      <div id="page-highlights" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">🎬 하이라이트 페이지</h2>
+        <p class="text-gray-400">저장된 하이라이트를 보고 관리하는 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-6 bg-gradient-to-br from-slate-900 to-purple-900"><!-- Filter & Search -->
+         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex gap-2"><button class="px-4 py-2 bg-orange-500 rounded-xl text-sm font-medium">전체</button> <button class="px-4 py-2 bg-white/10 rounded-xl text-sm">내 하이라이트</button> <button class="px-4 py-2 bg-white/10 rounded-xl text-sm">인기 영상</button> <button class="px-4 py-2 bg-white/10 rounded-xl text-sm">최신순</button>
+          </div>
+          <div class="relative"><input type="text" placeholder="하이라이트 검색..." class="pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-xl w-64">
+           <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+           </svg>
+          </div>
+         </div><!-- Highlight Grid -->
+         <div class="grid md:grid-cols-3 gap-4"><!-- Highlight Card -->
+          <div class="bg-white/5 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer group">
+           <div class="aspect-video bg-gradient-to-br from-orange-500/30 to-yellow-500/30 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+             <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition">
+              <svg class="w-8 h-8 ml-1" fill="currentColor" viewbox="0 0 24 24">
+               <path d="M8 5v14l11-7z" />
+              </svg>
+             </div>
+            </div>
+            <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs">
+             0:32
+            </div>
+            <div class="absolute top-2 left-2 px-2 py-1 bg-orange-500 rounded text-xs font-bold">
+             🔥 HOT
+            </div>
+           </div>
+           <div class="p-4">
+            <h4 class="font-bold mb-1 truncate">철면피가 결국 터진 순간 ㅋㅋ</h4>
+            <div class="flex items-center justify-between text-sm text-gray-400"><span>웃음지존킹</span> <span>👀 12.4K • ❤️ 2.3K</span>
+            </div>
+           </div>
+          </div>
+          <div class="bg-white/5 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer group">
+           <div class="aspect-video bg-gradient-to-br from-purple-500/30 to-pink-500/30 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+             <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition">
+              <svg class="w-8 h-8 ml-1" fill="currentColor" viewbox="0 0 24 24">
+               <path d="M8 5v14l11-7z" />
+              </svg>
+             </div>
+            </div>
+            <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs">
+             1:15
+            </div>
+           </div>
+           <div class="p-4">
+            <h4 class="font-bold mb-1 truncate">팀전에서 동시에 터진 레전드</h4>
+            <div class="flex items-center justify-between text-sm text-gray-400"><span>참을래매!</span> <span>👀 8.2K • ❤️ 1.5K</span>
+            </div>
+           </div>
+          </div>
+          <div class="bg-white/5 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer group">
+           <div class="aspect-video bg-gradient-to-br from-green-500/30 to-teal-500/30 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+             <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition">
+              <svg class="w-8 h-8 ml-1" fill="currentColor" viewbox="0 0 24 24">
+               <path d="M8 5v14l11-7z" />
+              </svg>
+             </div>
+            </div>
+            <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs">
+             0:45
+            </div>
+            <div class="absolute top-2 left-2 px-2 py-1 bg-purple-500 rounded text-xs font-bold">
+             내 영상
+            </div>
+           </div>
+           <div class="p-4">
+            <h4 class="font-bold mb-1 truncate">100연승 달성 순간</h4>
+            <div class="flex items-center justify-between text-sm text-gray-400"><span>나</span> <span>👀 5.6K • ❤️ 890</span>
+            </div>
+           </div>
+          </div>
+         </div><!-- Upload Section -->
+         <div class="mt-6 p-6 border-2 border-dashed border-white/20 rounded-xl text-center">
+          <div class="text-4xl mb-3">
+           📤
+          </div>
+          <h4 class="font-bold mb-2">하이라이트 업로드</h4>
+          <p class="text-gray-400 text-sm mb-4">배틀 중 저장한 하이라이트를 업로드하세요</p><button class="px-6 py-3 bg-orange-500 rounded-xl font-medium hover:bg-orange-600 transition">파일 선택</button>
+         </div>
+        </div>
+       </div>
+      </div><!-- Leaderboard Page -->
+      <div id="page-leaderboard" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">🏆 리더보드 페이지</h2>
+        <p class="text-gray-400">전체 유저 랭킹을 확인하는 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-6 bg-gradient-to-br from-slate-900 to-purple-900"><!-- Season Info -->
+         <div class="text-center mb-6"><span class="px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full font-bold">🏆 시즌 3 진행중</span>
+          <p class="text-gray-400 text-sm mt-2">시즌 종료까지 23일 남음</p>
+         </div><!-- Top 3 -->
+         <div class="flex justify-center items-end gap-4 mb-8"><!-- 2nd Place -->
+          <div class="text-center">
+           <div class="w-20 h-20 mx-auto bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-4xl mb-2 border-4 border-gray-400">
+            😎
+           </div>
+           <div class="bg-gray-500/20 rounded-xl p-3 h-24">
+            <p class="font-bold">🥈</p>
+            <p class="font-bold text-sm">철면피킹</p>
+            <p class="text-xs text-gray-400">98,234점</p>
+           </div>
+          </div><!-- 1st Place -->
+          <div class="text-center -mt-4">
+           <div class="w-24 h-24 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-5xl mb-2 border-4 border-yellow-400 glow">
+            👑
+           </div>
+           <div class="bg-yellow-500/20 rounded-xl p-4 h-28">
+            <p class="font-bold text-lg">🥇</p>
+            <p class="font-bold">웃음참기왕</p>
+            <p class="text-sm text-yellow-400">123,456점</p>
+           </div>
+          </div><!-- 3rd Place -->
+          <div class="text-center">
+           <div class="w-20 h-20 mx-auto bg-gradient-to-br from-amber-600 to-amber-700 rounded-full flex items-center justify-center text-4xl mb-2 border-4 border-amber-600">
+            🤣
+           </div>
+           <div class="bg-amber-600/20 rounded-xl p-3 h-24">
+            <p class="font-bold">🥉</p>
+            <p class="font-bold text-sm">참을래매!</p>
+            <p class="text-xs text-gray-400">87,654점</p>
+           </div>
+          </div>
+         </div><!-- Ranking List -->
+         <div class="space-y-2">
+          <div class="flex items-center p-3 bg-orange-500/20 border border-orange-500/30 rounded-xl"><span class="w-8 text-center font-bold text-orange-400">#42</span>
+           <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-400 rounded-full flex items-center justify-center text-xl mx-3">
+            😐
+           </div>
+           <div class="flex-1">
+            <p class="font-bold">웃음지존킹 (나)</p>
+            <p class="text-xs text-gray-400">승률 78% • 1,234전</p>
+           </div>
+           <p class="font-bold text-orange-400">54,321점</p>
+          </div>
+          <div class="flex items-center p-3 bg-white/5 rounded-xl"><span class="w-8 text-center font-bold text-gray-400">4</span>
+           <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-400 rounded-full flex items-center justify-center text-xl mx-3">
+            😊
+           </div>
+           <div class="flex-1">
+            <p class="font-bold">웃음초보</p>
+            <p class="text-xs text-gray-400">승률 72% • 892전</p>
+           </div>
+           <p class="font-bold">76,543점</p>
+          </div>
+          <div class="flex items-center p-3 bg-white/5 rounded-xl"><span class="w-8 text-center font-bold text-gray-400">5</span>
+           <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-400 rounded-full flex items-center justify-center text-xl mx-3">
+            😁
+           </div>
+           <div class="flex-1">
+            <p class="font-bold">무표정마스터</p>
+            <p class="text-xs text-gray-400">승률 85% • 567전</p>
+           </div>
+           <p class="font-bold">65,432점</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Settings Page -->
+      <div id="page-settings" class="page-section hidden">
+       <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">⚙️ 설정 페이지</h2>
+        <p class="text-gray-400">계정 및 앱 설정 페이지입니다.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-2xl border border-white/10 overflow-hidden card-hover">
+        <div class="p-6 bg-gradient-to-br from-slate-900 to-purple-900">
+         <div class="max-w-2xl mx-auto space-y-6"><!-- Account Settings -->
+          <div>
+           <h3 class="text-lg font-bold mb-4 flex items-center gap-2">👤 계정 설정</h3>
+           <div class="space-y-4 p-4 bg-white/5 rounded-xl">
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">이메일</p>
+              <p class="text-sm text-gray-400">user@example.com</p>
+             </div><button class="px-4 py-2 bg-white/10 rounded-lg text-sm">변경</button>
+            </div>
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">비밀번호</p>
+              <p class="text-sm text-gray-400">마지막 변경: 30일 전</p>
+             </div><button class="px-4 py-2 bg-white/10 rounded-lg text-sm">변경</button>
+            </div>
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">연결된 계정</p>
+              <p class="text-sm text-gray-400">Google, Discord</p>
+             </div><button class="px-4 py-2 bg-white/10 rounded-lg text-sm">관리</button>
+            </div>
+           </div>
+          </div><!-- Media Settings -->
+          <div>
+           <h3 class="text-lg font-bold mb-4 flex items-center gap-2">📹 미디어 설정</h3>
+           <div class="space-y-4 p-4 bg-white/5 rounded-xl">
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">카메라</p>
+              <p class="text-sm text-gray-400">FaceTime HD Camera</p>
+             </div><select class="px-4 py-2 bg-white/10 rounded-lg text-sm border border-white/20"> <option>FaceTime HD</option> <option>외장 웹캠</option> </select>
+            </div>
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">마이크</p>
+              <p class="text-sm text-gray-400">내장 마이크</p>
+             </div><select class="px-4 py-2 bg-white/10 rounded-lg text-sm border border-white/20"> <option>내장 마이크</option> <option>AirPods</option> </select>
+            </div>
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">영상 품질</p>
+              <p class="text-sm text-gray-400">720p</p>
+             </div><select class="px-4 py-2 bg-white/10 rounded-lg text-sm border border-white/20"> <option>480p</option> <option selected>720p</option> <option>1080p</option> </select>
+            </div>
+           </div>
+          </div><!-- Notification Settings -->
+          <div>
+           <h3 class="text-lg font-bold mb-4 flex items-center gap-2">🔔 알림 설정</h3>
+           <div class="space-y-4 p-4 bg-white/5 rounded-xl">
+            <div class="flex items-center justify-between">
+             <p class="font-medium">매칭 알림</p><label class="relative inline-flex items-center cursor-pointer"> <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-white/20 rounded-full peer peer-checked:bg-orange-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div></label>
+            </div>
+            <div class="flex items-center justify-between">
+             <p class="font-medium">친구 요청 알림</p><label class="relative inline-flex items-center cursor-pointer"> <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-white/20 rounded-full peer peer-checked:bg-orange-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div></label>
+            </div>
+            <div class="flex items-center justify-between">
+             <p class="font-medium">이벤트 알림</p><label class="relative inline-flex items-center cursor-pointer"> <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-white/20 rounded-full peer peer-checked:bg-orange-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div></label>
+            </div>
+           </div>
+          </div><!-- Danger Zone -->
+          <div>
+           <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-red-400">⚠️ 위험 영역</h3>
+           <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+            <div class="flex items-center justify-between">
+             <div>
+              <p class="font-medium">계정 삭제</p>
+              <p class="text-sm text-gray-400">모든 데이터가 영구 삭제됩니다</p>
+             </div><button class="px-4 py-2 bg-red-500 rounded-lg text-sm font-medium">삭제하기</button>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: '웃음참기 배틀'
+    };
+
+    let config = { ...defaultConfig };
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(page => {
+        page.classList.add('hidden');
+      });
+      document.getElementById('page-' + pageId).classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-item').forEach(nav => {
+        nav.classList.remove('active');
+        if (nav.dataset.page === pageId) {
+          nav.classList.add('active');
+        }
+      });
+    }
+
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      
+      const mainTitle = document.getElementById('main-title');
+      if (mainTitle) {
+        mainTitle.textContent = config.app_title || defaultConfig.app_title;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['app_title', config.app_title || defaultConfig.app_title]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bc5a5c3a2c4ea04',t:'MTc2ODE0NzQ0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

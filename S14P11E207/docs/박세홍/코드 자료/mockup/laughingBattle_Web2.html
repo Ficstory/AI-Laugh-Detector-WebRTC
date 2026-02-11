@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웃참 배틀 - Video Conference</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1f2937;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-badge {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(239, 68, 68, 0.95);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      letter-spacing: 0.5px;
+    }
+
+    /* Login Screen */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-screen {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .login-container {
+      max-width: 440px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      padding: 48px 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .login-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .login-form input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+
+    .login-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .divider {
+      text-align: center;
+      position: relative;
+      margin: 24px 0;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider span {
+      background: white;
+      padding: 0 12px;
+      color: #9ca3af;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .social-login {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 28px;
+      transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+      border-color: #d1d5db;
+      background: #f9fafb;
+    }
+
+    /* Lobby Screen */
+    .lobby-screen {
+      background: #1f2937;
+    }
+
+    .lobby-header {
+      background: #111827;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #374151;
+    }
+
+    .lobby-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+    }
+
+    .lobby-logo-icon {
+      font-size: 28px;
+    }
+
+    .lobby-logo-text {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .lobby-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar-small {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .user-name {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .lobby-content {
+      flex: 1;
+      display: flex;
+      padding: 40px;
+      gap: 32px;
+    }
+
+    .lobby-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .room-list-container {
+      flex: 1;
+      background: #111827;
+      border-radius: 12px;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .room-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .room-list-title {
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .create-room-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .create-room-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .room-card {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .room-card:hover {
+      border-color: #2563eb;
+      background: #374151;
+    }
+
+    .room-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .room-name {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .room-host {
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .room-badge {
+      background: #10b981;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .room-badge.full {
+      background: #6b7280;
+    }
+
+    .room-info {
+      display: flex;
+      gap: 16px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .room-info-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lobby-sidebar {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .stats-card {
+      background: #111827;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .stats-title {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #374151;
+    }
+
+    .stat-item:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      color: #9ca3af;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-value {
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .quick-actions {
+      background: #111827;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .quick-action-btn {
+      width: 100%;
+      background: #374151;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .quick-action-btn:hover {
+      background: #4b5563;
+    }
+
+    .quick-action-btn.primary {
+      background: #2563eb;
+    }
+
+    .quick-action-btn.primary:hover {
+      background: #1d4ed8;
+    }
+
+    /* Video Conference Screen */
+    .conference-screen {
+      background: #0f0f0f;
+    }
+
+    .conference-header {
+      background: #1f1f1f;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .conference-info {
+      color: white;
+    }
+
+    .room-name-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .room-time {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-btn {
+      background: #374151;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .header-btn:hover {
+      background: #4b5563;
+    }
+
+    .header-btn.danger {
+      background: #dc2626;
+    }
+
+    .header-btn.danger:hover {
+      background: #b91c1c;
+    }
+
+    .conference-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      position: relative;
+    }
+
+    .video-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .video-tile {
+      background: #1f1f1f;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .video-tile.laughing {
+      border-color: #ef4444;
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px) rotate(-2deg); }
+      75% { transform: translateX(5px) rotate(2deg); }
+    }
+
+    .video-tile.winning {
+      border-color: #10b981;
+    }
+
+    .video-placeholder {
+      font-size: 120px;
+    }
+
+    .video-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .participant-info {
+      color: white;
+    }
+
+    .participant-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .participant-status {
+      font-size: 13px;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .participant-status.laughing {
+      color: #ef4444;
+    }
+
+    .laugh-indicator {
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .score-overlay {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(17, 24, 39, 0.95);
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .conference-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+      background: #1f1f1f;
+      border-radius: 12px;
+    }
+
+    .control-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #374151;
+      color: white;
+    }
+
+    .control-btn:hover {
+      background: #4b5563;
+      transform: scale(1.1);
+    }
+
+    .control-btn.active {
+      background: #ef4444;
+    }
+
+    .control-btn.leave {
+      background: #dc2626;
+      width: 120px;
+      border-radius: 28px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .control-btn.leave:hover {
+      background: #b91c1c;
+    }
+
+    .chat-panel {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      bottom: 24px;
+      width: 320px;
+      background: #1f1f1f;
+      border-radius: 12px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .chat-panel.active {
+      display: flex;
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #374151;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-title {
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .chat-close:hover {
+      background: #374151;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .chat-message {
+      margin-bottom: 16px;
+    }
+
+    .message-author {
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .message-content {
+      color: white;
+      font-size: 14px;
+      background: #374151;
+      padding: 10px 12px;
+      border-radius: 8px;
+    }
+
+    .chat-input-container {
+      padding: 16px;
+      border-top: 1px solid #374151;
+    }
+
+    .chat-input {
+      width: 100%;
+      padding: 12px;
+      background: #374151;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      background: #4b5563;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .lobby-content {
+        flex-direction: column;
+      }
+
+      .lobby-sidebar {
+        width: 100%;
+      }
+
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-panel {
+        width: 100%;
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 0;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper">
+   <div class="demo-badge">
+    PROTOTYPE
+   </div><!-- Login Screen -->
+   <div id="loginScreen" class="screen login-screen active">
+    <div class="login-container">
+     <div class="login-logo">
+      <div class="login-logo-icon">
+       😂
+      </div>
+      <h1 class="login-title" id="appTitle">웃참 배틀</h1>
+      <p class="login-subtitle">화상 대결로 승부하세요!</p>
+     </div>
+     <form class="login-form" id="loginForm"><input type="email" placeholder="이메일 주소" required> <input type="password" placeholder="비밀번호" required> <button type="submit" class="login-btn">로그인</button>
+     </form>
+     <div class="divider"><span>또는</span>
+     </div>
+     <div class="social-login"><button class="social-btn" id="kakaoBtn">💬</button> <button class="social-btn" id="googleBtn">🌐</button> <button class="social-btn" id="appleBtn">🍎</button>
+     </div>
+    </div>
+   </div><!-- Lobby Screen -->
+   <div id="lobbyScreen" class="screen lobby-screen">
+    <div class="lobby-header">
+     <div class="lobby-logo">
+      <div class="lobby-logo-icon">
+       😂
+      </div>
+      <div class="lobby-logo-text" id="lobbyTitle">
+       웃참 배틀
+      </div>
+     </div>
+     <div class="lobby-user">
+      <div class="user-avatar-small">
+       😎
+      </div>
+      <div class="user-name">
+       웃참왕
+      </div>
+     </div>
+    </div>
+    <div class="lobby-content">
+     <div class="lobby-main">
+      <div class="room-list-container">
+       <div class="room-list-header">
+        <h2 class="room-list-title">참가 가능한 방</h2><button class="create-room-btn" id="createRoomBtn"> <span>➕</span> <span>방 만들기</span> </button>
+       </div>
+       <div class="room-card" data-room="1">
+        <div class="room-card-header">
+         <div>
+          <div class="room-name">
+           🔥 치킨내기 웃참 대결
+          </div>
+          <div class="room-host">
+           호스트: 웃음마스터
+          </div>
+         </div>
+         <div class="room-badge">
+          대기중
+         </div>
+        </div>
+        <div class="room-info">
+         <div class="room-info-item"><span>👥</span> <span>2/4 명</span>
+         </div>
+         <div class="room-info-item"><span>⏱️</span> <span>5분 라운드</span>
+         </div>
+         <div class="room-info-item"><span>🏆</span> <span>랭크 매치</span>
+         </div>
+        </div>
+       </div>
+       <div class="room-card" data-room="2">
+        <div class="room-card-header">
+         <div>
+          <div class="room-name">
+           😄 친구들만 모여라
+          </div>
+          <div class="room-host">
+           호스트: 깔깔이
+          </div>
+         </div>
+         <div class="room-badge">
+          대기중
+         </div>
+        </div>
+        <div class="room-info">
+         <div class="room-info-item"><span>👥</span> <span>3/6 명</span>
+         </div>
+         <div class="room-info-item"><span>⏱️</span> <span>10분 라운드</span>
+         </div>
+         <div class="room-info-item"><span>🎮</span> <span>일반 매치</span>
+         </div>
+        </div>
+       </div>
+       <div class="room-card" data-room="3">
+        <div class="room-card-header">
+         <div>
+          <div class="room-name">
+           ⚡ 스피드 웃참 배틀
+          </div>
+          <div class="room-host">
+           호스트: 프로웃참러
+          </div>
+         </div>
+         <div class="room-badge">
+          진행중
+         </div>
+        </div>
+        <div class="room-info">
+         <div class="room-info-item"><span>👥</span> <span>2/2 명</span>
+         </div>
+         <div class="room-info-item"><span>⏱️</span> <span>3분 라운드</span>
+         </div>
+         <div class="room-info-item"><span>🚀</span> <span>빠른 매치</span>
+         </div>
+        </div>
+       </div>
+       <div class="room-card" data-room="4">
+        <div class="room-card-header">
+         <div>
+          <div class="room-name">
+           🎯 고수들의 대결
+          </div>
+          <div class="room-host">
+           호스트: 무표정킹
+          </div>
+         </div>
+         <div class="room-badge full">
+          만원
+         </div>
+        </div>
+        <div class="room-info">
+         <div class="room-info-item"><span>👥</span> <span>4/4 명</span>
+         </div>
+         <div class="room-info-item"><span>⏱️</span> <span>7분 라운드</span>
+         </div>
+         <div class="room-info-item"><span>🏆</span> <span>랭크 매치</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="lobby-sidebar">
+      <div class="stats-card">
+       <h3 class="stats-title">내 전적</h3>
+       <div class="stat-item">
+        <div class="stat-label"><span>🏆</span> <span>승리</span>
+        </div>
+        <div class="stat-value">
+         24
+        </div>
+       </div>
+       <div class="stat-item">
+        <div class="stat-label"><span>😢</span> <span>패배</span>
+        </div>
+        <div class="stat-value">
+         18
+        </div>
+       </div>
+       <div class="stat-item">
+        <div class="stat-label"><span>📊</span> <span>승률</span>
+        </div>
+        <div class="stat-value">
+         57%
+        </div>
+       </div>
+       <div class="stat-item">
+        <div class="stat-label"><span>🏅</span> <span>랭킹</span>
+        </div>
+        <div class="stat-value">
+         #47
+        </div>
+       </div>
+      </div>
+      <div class="quick-actions">
+       <h3 class="stats-title">빠른 시작</h3><button class="quick-action-btn primary" id="quickMatchBtn"> <span>⚡</span> <span>빠른 매칭</span> </button> <button class="quick-action-btn" id="friendsBtn"> <span>👥</span> <span>친구 목록</span> </button> <button class="quick-action-btn" id="rankingBtn"> <span>🏅</span> <span>랭킹 보기</span> </button> <button class="quick-action-btn" id="profileBtn"> <span>👤</span> <span>프로필</span> </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Video Conference Screen -->
+   <div id="conferenceScreen" class="screen conference-screen">
+    <div class="conference-header">
+     <div class="conference-info">
+      <div class="room-name-header" id="roomTitle">
+       웃참 배틀 대전
+      </div>
+      <div class="room-time">
+       ⏱️ 02:34 경과
+      </div>
+     </div>
+     <div class="header-actions"><button class="header-btn" id="recordBtn">🔴 녹화</button> <button class="header-btn danger" id="leaveHeaderBtn">나가기</button>
+     </div>
+    </div>
+    <div class="conference-main">
+     <div class="score-overlay">
+      😎 나: 3 | 😄 상대: 2
+     </div>
+     <div class="video-grid">
+      <div class="video-tile winning" id="myVideo">
+       <div class="video-placeholder">
+        😎
+       </div>
+       <div class="video-overlay">
+        <div class="participant-info">
+         <div class="participant-name">
+          나 (웃참왕)
+         </div>
+         <div class="participant-status"><span>●</span> <span>참는 중</span>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="video-tile laughing" id="opponentVideo">
+       <div class="video-placeholder">
+        😄
+       </div>
+       <div class="video-overlay">
+        <div class="participant-info">
+         <div class="participant-name">
+          깔깔이
+         </div>
+         <div class="participant-status laughing"><span>●</span> <span>웃음 감지됨!</span>
+         </div>
+        </div>
+        <div class="laugh-indicator"><span>😂</span> <span>웃었다!</span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="conference-controls"><button class="control-btn" id="micBtn" title="마이크">🎤</button> <button class="control-btn active" id="cameraBtn" title="카메라">📹</button> <button class="control-btn" id="chatBtn" title="채팅">💬</button> <button class="control-btn" id="reactBtn" title="이모티콘">😀</button> <button class="control-btn leave" id="leaveBtn">나가기</button>
+     </div>
+     <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+       <div class="chat-title">
+        채팅
+       </div><button class="chat-close" id="chatCloseBtn">✕</button>
+      </div>
+      <div class="chat-messages">
+       <div class="chat-message">
+        <div class="message-author">
+         웃참왕
+        </div>
+        <div class="message-content">
+         준비됐어요!
+        </div>
+       </div>
+       <div class="chat-message">
+        <div class="message-author">
+         깔깔이
+        </div>
+        <div class="message-content">
+         ㅋㅋㅋㅋ 시작!
+        </div>
+       </div>
+       <div class="chat-message">
+        <div class="message-author">
+         시스템
+        </div>
+        <div class="message-content">
+         ⚠️ 깔깔이님이 웃음을 참지 못했습니다!
+        </div>
+       </div>
+      </div>
+      <div class="chat-input-container"><input type="text" class="chat-input" placeholder="메시지를 입력하세요..." id="chatInput">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "웃참 배틀",
+      room_title: "웃참 배틀 대전",
+      waiting_message: "상대방을 기다리는 중...",
+      background_color: "#1f2937",
+      surface_color: "#111827",
+      text_color: "#ffffff",
+      primary_action_color: "#2563eb",
+      secondary_action_color: "#10b981",
+      font_family: "Inter",
+      font_size: 16
+    };
+
+    const config = window.elementSdk?.config || defaultConfig;
+
+    async function onConfigChange(config) {
+      const appTitle = document.getElementById('appTitle');
+      const lobbyTitle = document.getElementById('lobbyTitle');
+      const roomTitle = document.getElementById('roomTitle');
+
+      if (appTitle) {
+        appTitle.textContent = config.app_title || defaultConfig.app_title;
+      }
+      if (lobbyTitle) {
+        lobbyTitle.textContent = config.app_title || defaultConfig.app_title;
+      }
+      if (roomTitle) {
+        roomTitle.textContent = config.room_title || defaultConfig.room_title;
+      }
+
+      // Apply colors
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.querySelector('.lobby-screen').style.background = backgroundColor;
+      document.querySelector('.lobby-header').style.background = surfaceColor;
+      
+      document.querySelectorAll('.room-list-container, .stats-card, .quick-actions, .room-card').forEach(el => {
+        el.style.background = surfaceColor;
+      });
+
+      document.querySelectorAll('.lobby-logo-text, .user-name, .room-list-title, .stats-title, .room-name, .participant-name, .stat-value').forEach(el => {
+        el.style.color = textColor;
+      });
+
+      document.querySelectorAll('.login-btn, .create-room-btn, .quick-action-btn.primary, .control-btn').forEach(el => {
+        el.style.background = primaryActionColor;
+      });
+
+      document.querySelectorAll('.room-badge').forEach(el => {
+        if (!el.classList.contains('full')) {
+          el.style.background = secondaryActionColor;
+        }
+      });
+
+      // Apply font
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+
+      document.body.style.fontFamily = `'${customFont}', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif`;
+      
+      document.querySelector('.login-title').style.fontSize = `${baseSize * 1.75}px`;
+      document.querySelectorAll('.room-list-title, .stats-title').forEach(el => {
+        el.style.fontSize = `${baseSize * 1.125}px`;
+      });
+      document.querySelectorAll('.room-name, .participant-name').forEach(el => {
+        el.style.fontSize = `${baseSize}px`;
+      });
+      document.querySelectorAll('.room-host, .participant-status').forEach(el => {
+        el.style.fontSize = `${baseSize * 0.8125}px`;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["room_title", config.room_title || defaultConfig.room_title],
+          ["waiting_message", config.waiting_message || defaultConfig.waiting_message]
+        ])
+      });
+    }
+
+    // Screen navigation
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // Login handlers
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      showScreen('lobbyScreen');
+    });
+
+    document.getElementById('kakaoBtn').addEventListener('click', () => {
+      showScreen('lobbyScreen');
+    });
+
+    document.getElementById('googleBtn').addEventListener('click', () => {
+      showScreen('lobbyScreen');
+    });
+
+    document.getElementById('appleBtn').addEventListener('click', () => {
+      showScreen('lobbyScreen');
+    });
+
+    // Lobby handlers
+    document.querySelectorAll('.room-card').forEach(card => {
+      card.addEventListener('click', () => {
+        showScreen('conferenceScreen');
+      });
+    });
+
+    document.getElementById('quickMatchBtn').addEventListener('click', () => {
+      showScreen('conferenceScreen');
+    });
+
+    // Conference handlers
+    let micEnabled = true;
+    let cameraEnabled = true;
+    let chatOpen = false;
+
+    document.getElementById('micBtn').addEventListener('click', (e) => {
+      micEnabled = !micEnabled;
+      e.target.classList.toggle('active', !micEnabled);
+      e.target.textContent = micEnabled ? '🎤' : '🎤❌';
+    });
+
+    document.getElementById('cameraBtn').addEventListener('click', (e) => {
+      cameraEnabled = !cameraEnabled;
+      e.target.classList.toggle('active', !cameraEnabled);
+      e.target.textContent = cameraEnabled ? '📹' : '📹❌';
+    });
+
+    document.getElementById('chatBtn').addEventListener('click', () => {
+      chatOpen = !chatOpen;
+      document.getElementById('chatPanel').classList.toggle('active', chatOpen);
+    });
+
+    document.getElementById('chatCloseBtn').addEventListener('click', () => {
+      chatOpen = false;
+      document.getElementById('chatPanel').classList.remove('active');
+    });
+
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && e.target.value.trim()) {
+        const messagesContainer = document.querySelector('.chat-messages');
+        const newMessage = document.createElement('div');
+        newMessage.className = 'chat-message';
+        newMessage.innerHTML = `
+          <div class="message-author">나</div>
+          <div class="message-content">${e.target.value}</div>
+        `;
+        messagesContainer.appendChild(newMessage);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        e.target.value = '';
+      }
+    });
+
+    document.getElementById('leaveBtn').addEventListener('click', () => {
+      showScreen('lobbyScreen');
+    });
+
+    document.getElementById('leaveHeaderBtn').addEventListener('click', () => {
+      showScreen('lobbyScreen');
+    });
+
+    // Initialize
+    onConfigChange(config);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be39576d33a3097',t:'MTc2ODQ2MTM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

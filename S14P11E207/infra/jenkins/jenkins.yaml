@@ -1,0 +1,82 @@
+# Jenkins Configuration as Code (JCasC)
+# 초기 설정 자동화용 - 필요시 활성화
+
+jenkins:
+  systemMessage: "Welcome to Jenkins CI/CD Server - Smile Battle Project"
+
+  # 보안 설정
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "${JENKINS_ADMIN_ID:-admin}"
+          password: "${JENKINS_ADMIN_PASSWORD:-admin}"
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  # 전역 도구 설정
+  # tool:
+  #   git:
+  #     installations:
+  #       - name: "Default"
+  #         home: "git"
+
+# Credentials 설정 (환경변수로 주입)
+# Credentials 설정 (환경변수로 주입)
+# 보안 강화를 위해 JCasC(파일) 대신 Jenkins Web UI 또는 Credentials Plugin을 통해 암호화된 방식으로 관리하는 것을 권장합니다.
+# 아래 설정은 초기화 시에만 사용되거나, 테스트 목적으로만 사용해야 합니다.
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          # GitLab 접근용 (토큰 방식 권장)
+          # - usernamePassword:
+          #     scope: GLOBAL
+          #     id: "gitlab-credentials"
+          #     username: "${GITLAB_USERNAME}"
+          #     password: "${GITLAB_TOKEN}"
+          #     description: "GitLab Access Token"
+          
+          # Docker Registry 접근용 (필요시)
+          # - usernamePassword:
+          #     scope: GLOBAL
+          #     id: "docker-registry"
+          #     username: "${DOCKER_USERNAME}"
+          #     password: "${DOCKER_PASSWORD}"
+          #     description: "Docker Registry Credentials"
+
+# Unclassified 설정
+unclassified:
+  location:
+    url: "${JENKINS_URL:-http://localhost:8080/}"
+    adminAddress: "${JENKINS_ADMIN_EMAIL:-admin@example.com}"
+
+  # GitLab 연동 설정
+  # gitLabConnectionConfig:
+  #   connections:
+  #     - name: "GitLab"
+  #       url: "${GITLAB_URL}"
+  #       credentialsId: "gitlab-credentials"
+
+# Job DSL을 통한 파이프라인 시드 (선택사항)
+# jobs:
+#   - script: |
+#       pipelineJob('backend-pipeline') {
+#         definition {
+#           cpsScm {
+#             scm {
+#               git {
+#                 remote {
+#                   url('${GIT_REPO_URL}')
+#                   credentials('gitlab-credentials')
+#                 }
+#                 branch('*/main')
+#               }
+#             }
+#             scriptPath('backend/Jenkinsfile')
+#           }
+#         }
+#       }
+

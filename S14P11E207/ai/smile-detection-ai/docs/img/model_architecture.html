@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .architecture {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .block {
+            border: 1px solid #333;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 120px;
+        }
+        .block h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+        .block p {
+            font-size: 11px;
+            color: #666;
+            margin: 3px 0;
+        }
+        .arrow {
+            font-size: 20px;
+            color: #999;
+        }
+        .split {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .spec {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .spec .label {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .spec .value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <h1>모델 아키텍처: DualHeadSmileDetector</h1>
+
+    <div class="architecture">
+        <div class="block">
+            <h3>Input</h3>
+            <p>5 Frames</p>
+            <p>224×224×3</p>
+        </div>
+
+        <span class="arrow">→</span>
+
+        <div class="block">
+            <h3>CNN Backbone</h3>
+            <p>MobileNetV3-Small</p>
+            <p>pretrained=True</p>
+        </div>
+
+        <span class="arrow">→</span>
+
+        <div class="block">
+            <h3>Features</h3>
+            <p>256-dim vector</p>
+            <p>per frame</p>
+        </div>
+
+        <span class="arrow">→</span>
+
+        <div class="block">
+            <h3>Bi-LSTM</h3>
+            <p>2 Layers</p>
+            <p>Hidden: 128</p>
+        </div>
+
+        <span class="arrow">→</span>
+
+        <div class="split">
+            <div class="block">
+                <h3>Head 1: Smile</h3>
+                <p>Binary (0/1)</p>
+            </div>
+            <div class="block">
+                <h3>Head 2: Emotion</h3>
+                <p>7-class</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="specs">
+        <div class="spec">
+            <div class="label">Input Size</div>
+            <div class="value">224×224</div>
+        </div>
+        <div class="spec">
+            <div class="label">Sequence Length</div>
+            <div class="value">5 frames</div>
+        </div>
+        <div class="spec">
+            <div class="label">Parameters</div>
+            <div class="value">~2.5M</div>
+        </div>
+        <div class="spec">
+            <div class="label">Inference</div>
+            <div class="value">~40ms</div>
+        </div>
+    </div>
+</body>
+</html>

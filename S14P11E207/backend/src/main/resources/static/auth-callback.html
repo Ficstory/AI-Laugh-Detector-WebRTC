@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E207 Auth Callback</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px; margin: 32px auto; padding: 0 16px; }
+    pre { background: #f6f8fa; padding: 12px; border-radius: 8px; overflow: auto; }
+    .hint { color: #555; }
+  </style>
+</head>
+<body>
+  <h1>로그인 콜백 처리 중...</h1>
+  <p class="hint">이 페이지는 백엔드 콜백(JSON)을 받아서 테스트 페이지에서 볼 수 있게 저장한 뒤 이동합니다.</p>
+  <pre id="out"></pre>
+
+  <script>
+    const STORAGE_KEY = 'E207_AUTH_TEST_LAST';
+
+    function out(msg) {
+      document.getElementById('out').textContent = msg;
+    }
+
+    async function run() {
+      try {
+        // URL 쿼리: code=...&provider=...&state=...
+        const url = new URL(location.href);
+        let provider = url.searchParams.get('provider');
+        const code = url.searchParams.get('code');
+        const state = url.searchParams.get('state');
+
+        if (!code) {
+          out('code가 없습니다. 이 페이지는 /auth/test/{provider}/start 를 통해 들어와야 합니다.');
+          return;
+        }
+
+        // provider 파라미터가 유실되는 케이스가 있어 복구 로직을 둠
+        // 1) state에 provider가 담겨오는 경우 (NAVER 등)
+        if (!provider && state) {
+          const m = String(state).match(/PROVIDER:(KAKAO|NAVER|GOOGLE)/i);
+          if (m) provider = m[1].toUpperCase();
+        }
+        // 2) 그래도 없으면 현재 페이지가 카카오 콘솔에만 등록돼 있는 경우가 많아 기본값을 KAKAO로 둠
+        if (!provider) {
+          provider = 'KAKAO';
+        }
+
+        const callbackUrl = `/auth/test/${encodeURIComponent(provider)}/callback?code=${encodeURIComponent(code)}${state ? `&state=${encodeURIComponent(state)}` : ''}`;
+
+        const res = await fetch(callbackUrl, { method: 'GET', credentials: 'include' });
+        const json = await res.json();
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(json));
+
+        out('OK. 테스트 페이지로 이동합니다.\n\n' + JSON.stringify(json, null, 2));
+        setTimeout(() => {
+          location.replace('/auth-test.html');
+        }, 300);
+      } catch (e) {
+        out(String(e));
+      }
+    }
+
+    run();
+  </script>
+</body>
+</html>
