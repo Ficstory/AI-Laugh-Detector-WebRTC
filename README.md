@@ -41,61 +41,26 @@
 
 ## 핵심 기술 포인트
 
-### 브라우저 기반 웃음 판정
+| 포인트 | 구현 방식 | 의미 |
+|--------|-----------|------|
+| 미디어와 게임 이벤트 분리 | OpenVidu/WebRTC는 영상·음성 스트림, STOMP/SockJS는 준비·턴·웃음·신고 이벤트 담당 | 화상 연결과 게임 규칙 처리를 독립적으로 다룸 |
+| 브라우저 AI 웃음 판정 | MediaPipe Face Detector, `onnxruntime-web`, `smile_detector.onnx`, 5프레임 시퀀스, EMA/임계값 보정 | 서버 왕복 없이 클라이언트에서 웃음을 판정하고 확정 이벤트만 전송 |
+| Electron 기반 방 보호 | `isElectronNeeded`, HMAC 기반 `X-Signature`/`X-Timestamp` 검증, Electron 사용 여부 표시 | Electron 전용 방 입장 기준과 캡처 경고 흐름 제공 |
+| 신고와 운영 대응 | `POST /reports`, `REQUEST_REPORT`, DB 저장, Google Sheets 기록 | 게임 중 신고를 서비스 운영 데이터로 남김 |
+| 인증 보안 | Kakao/Naver/Google OAuth, `registerToken`, Access Token, HttpOnly Refresh Cookie, Refresh Token Rotation | 소셜 로그인 이후 세션을 안전하게 유지 |
+| 배포와 관측 | Jenkins, Nginx, Blue/Green, Grafana/Loki/Promtail | 배포 중단 시간을 줄이고 컨테이너 로그를 추적 |
 
-- `@mediapipe/tasks-vision`의 Face Detector로 비디오 프레임에서 얼굴 영역을 탐지합니다.
-- `onnxruntime-web` WASM 실행 환경에서 `smile_detector.onnx` 모델을 로드합니다.
-- 탐지한 얼굴을 224x224 입력으로 전처리하고, 5프레임 시퀀스를 `[1, 5, 3, 224, 224]` 형태로 쌓아 추론합니다.
-- 추론 결과는 EMA(`alpha=0.3`)로 보정하고, 웃음 확률이 임계값(`0.85`) 이상으로 짧은 확인 시간 동안 유지되면 웃음으로 확정합니다.
-- 배틀 화면은 수비자의 웃음이 확정되면 `REQUEST_LAUGHED`를 `/publish/{roomId}`로 전송합니다.
-- 서버의 `StompMessageService`는 `REQUEST_LAUGHED`를 받아 공격자 점수, 턴 전환, 라운드 종료, 최종 승패를 처리합니다.
-- AI 학습/검증 자산은 `ai/smile-detection-ai`에서 관리하고, FastAPI 서버는 이미지 분석 API와 모델 설정 API를 제공합니다.
+AI 판정 흐름:
 
-### WebRTC와 게임 이벤트 분리
+```text
+MediaPipe 얼굴 탐지 -> ONNX 5프레임 추론 -> EMA/임계값 보정 -> REQUEST_LAUGHED -> 서버 턴/라운드/승패 처리
+```
 
-- OpenVidu는 영상/음성 스트림 연결과 세션 토큰 발급 흐름을 담당합니다.
-- 게임 진행 상태는 STOMP 메시지로 별도 전송해 미디어 세션과 게임 규칙 처리를 분리합니다.
-- `/connect` 엔드포인트로 SockJS 연결을 열고, `/publish/{roomId}`로 클라이언트 이벤트를 발행합니다.
-- 서버는 `/topic`, `/queue`, `/user` 채널로 방 전체 또는 사용자별 응답을 내려줍니다.
-- WebSocket 연결 시 JWT는 `StompJwtInterceptor`에서 검증합니다.
+Electron 검증 흐름:
 
-### Electron 앱 기반 방 보호와 캡처 경고
-
-- 다운로드 화면은 Windows용 Electron 앱 배포 경로를 제공하고, 방/매칭 화면은 참가자의 Electron 앱 사용 여부를 표시합니다.
-- Electron 전용 방은 `isElectronNeeded` 옵션으로 생성되며, 서버는 `X-Signature`와 `X-Timestamp` 헤더를 HMAC-SHA256으로 검증합니다.
-- 서명 검증은 타임스탬프 기준 5분 이내 요청만 허용해 재전송 위험을 줄이고, 유효하지 않으면 Electron 전용 방 생성/입장을 거부합니다.
-- 배틀 화면의 `useBlockCapture`는 `Win+Shift+S`, `PrintScreen`, 포커스 이탈을 감지해 경고 모달과 화면 가림을 표시합니다.
-- 포커스가 일정 시간 안에 돌아오지 않으면 클라이언트가 `REQUEST_SURRENDER`를 전송해 게임 규칙 안에서 패배 처리로 이어집니다.
-
-### 신고와 악성 유저 대응
-
-- 배틀 화면의 신고 모달은 상대 닉네임, 사유, 상세 내용을 `POST /reports`로 전송합니다.
-- `ReportService`는 신고 대상 존재 여부와 자기 자신 신고를 검증하고, 신고 데이터를 DB에 저장합니다.
-- 신고 저장 후 `GoogleSheetsService`가 운영 확인용 Google Sheets에 한 줄을 추가하며, Sheets 기록 실패는 신고 접수 자체를 막지 않습니다.
-- 신고 접수 후 클라이언트는 `REQUEST_REPORT` STOMP 이벤트를 발행하고, 서버는 `RESPONSE_REPORTED`로 방 참가자에게 신고 결과를 알립니다.
-
-### OAuth와 JWT 인증 보안
-
-- Kakao, Naver, Google OAuth 인가/콜백 흐름을 제공하고, 신규 사용자는 `registerToken`으로 회원가입 단계로 이어집니다.
-- 회원가입 API는 `registerToken`에서 소셜 ID와 provider를 검증한 뒤 닉네임 정책과 중복 가입을 확인합니다.
-- 로그인/회원가입 성공 시 Access Token과 Refresh Token을 발급하고, 서버는 Refresh Token을 HttpOnly Cookie로 설정합니다.
-- Refresh Token은 Redis에 저장된 값과 비교하며, 재발급 시 새 토큰으로 회전해 기존 토큰 재사용을 막습니다.
-- Access Token 만료 시 `JwtAuthenticationFilter`와 프론트엔드 axios 인터셉터가 Refresh Cookie 기반 Silent Refresh 흐름을 수행합니다.
-
-### 상태 저장 계층 분리
-
-- MySQL은 사용자, 방, 게임 결과 등 영속 데이터를 저장합니다.
-- Redis는 Refresh Token과 빠른 조회가 필요한 인증 상태를 관리합니다.
-- MinIO는 프로필 이미지 등 오브젝트 파일을 저장하고 Presigned URL 업로드 흐름을 제공합니다.
-- 운영 환경에서는 Data(Stateful)와 App(Stateless)을 Docker Compose 레벨에서 분리해 앱 배포가 DB 계층에 영향을 주지 않도록 구성했습니다.
-
-### 배포와 운영
-
-- Jenkins 파이프라인으로 빌드와 배포를 자동화합니다.
-- Nginx Reverse Proxy가 프론트엔드, 백엔드, MinIO, Jenkins, OpenVidu Webhook 외부 엔드포인트(`/api/webhook`)를 중계합니다.
-- WAS는 Blue/Green 배포 구조로 운영하고, 새 인스턴스 헬스체크 이후 트래픽을 전환해 배포 중단 시간을 줄입니다.
-- Grafana, Loki, Promtail 기반 PLG 스택으로 컨테이너 로그와 운영 상태를 확인합니다.
-- Data(Stateful)와 App(Stateless) 스택을 분리해 앱 배포가 MySQL, Redis, MinIO 계층에 주는 영향을 낮춥니다.
+```text
+Electron 앱 요청 -> X-Signature/X-Timestamp 전달 -> 서버 HMAC 검증 -> Electron 전용 방 생성/입장 허용
+```
 
 ---
 
@@ -273,32 +238,88 @@
 
 ---
 
-## 저장소 구조
+## 저장소 구조와 라우팅맵
 
 ```text
 .
-├── ai/
-│   └── smile-detection-ai/       # 웃음 감지 모델, 학습 스크립트, FastAPI 서버
-├── backend/                      # Spring Boot API 서버
+├── frontend/                         # React 웹 클라이언트
+│   ├── src/pages/                    # 랜딩, OAuth, 매칭, 방, 배틀, 다운로드 화면
+│   ├── src/components/               # 공통 UI, Video, SmileCam
+│   ├── src/services/                 # smileDetector 등 브라우저 AI 추론 로직
+│   ├── src/hooks/                    # 캡처/포커스 감지 등 커스텀 훅
+│   ├── src/stores/                   # Zustand 상태 관리
+│   └── src/lib/                      # axios, queryClient
+├── backend/                          # Spring Boot API 서버
 │   ├── src/main/java/ssafy/E207/
-│   │   ├── domain/               # auth, user, match, game
-│   │   └── global/               # config, jwt, error, logging
-│   └── docker-compose.*.yml
-├── frontend/                     # React 웹 클라이언트
-│   ├── src/components/           # 공통 UI, Video, SmileCam
-│   ├── src/pages/                # 매칭, 방, 배틀, OAuth 화면
-│   ├── src/services/             # smileDetector
-│   ├── src/hooks/                # 캡처 감지 등 커스텀 훅
-│   ├── src/stores/               # Zustand 상태
-│   └── src/lib/                  # axios, queryClient
-├── infra/                        # Jenkins, Nginx, DB/Redis/MinIO, monitoring
-├── docs/                         # API/기술조사/설계/시연 자료
-├── exec/                         # 제출 및 포팅 문서
-├── scripts/                      # 배포 보조 스크립트
-├── Makefile                      # 로컬/개발/운영 실행 진입점
-├── DOCKER_GUIDE.md               # Docker Compose 환경별 가이드
-└── DEPLOYMENT_GUIDE.md           # Blue/Green 배포 및 운영 가이드
+│   │   ├── domain/                   # auth, user, match, game, report
+│   │   └── global/                   # security, jwt, websocket, error, logging
+│   └── docker-compose.*.yml          # 백엔드 로컬/개발/운영 실행 구성
+├── ai/smile-detection-ai/            # 웃음 감지 모델 학습, ONNX export, FastAPI 서버
+├── infra/                            # Jenkins, Nginx, DB/Redis/MinIO, monitoring
+├── docs/                             # API, 기술 조사, 설계, 시연 자료
+│   ├── demo/                         # README 주요 기능 시연 영상/썸네일
+│   ├── img/                          # 시스템 아키텍처 이미지
+│   └── {팀원명}/                     # 팀원별 기획/조사/기술 문서
+├── exec/                             # 포팅 매뉴얼과 제출 산출물
+├── scripts/                          # 배포 보조 스크립트
+├── Makefile                          # 로컬/개발/운영 실행 진입점
+├── DOCKER_GUIDE.md                   # Docker Compose 환경별 가이드
+└── DEPLOYMENT_GUIDE.md               # Blue/Green 배포 및 운영 가이드
 ```
+
+---
+
+## 문서 바로가기
+
+### Overview
+
+| 문서 | 경로 |
+|------|------|
+| Frontend README | [frontend/README.md](frontend/README.md) |
+| Backend README | [backend/README.md](backend/README.md) |
+| Infra README | [infra/README.md](infra/README.md) |
+| Docker Guide | [DOCKER_GUIDE.md](DOCKER_GUIDE.md) |
+| Deployment Guide | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
+| Porting Manual | [exec/PORTING_MANUAL.md](exec/PORTING_MANUAL.md) |
+
+### Service / 기획
+
+| 문서 | 경로 |
+|------|------|
+| 팀장 기획 산출물 | [docs/이재호/readme.md](docs/이재호/readme.md) |
+| FE 기술 명세서 | [docs/김승철/FE_기술명세서.md](docs/김승철/FE_기술명세서.md) |
+| 배틀 화면 FE 기술 명세서 | [docs/박세홍/FE_기술명세서.md](docs/박세홍/FE_기술명세서.md) |
+| 시장 조사 | [docs/오언서/조사_분석/시장조사/시장조사.md](docs/오언서/조사_분석/시장조사/시장조사.md) |
+
+### Architecture / API
+
+| 문서 | 경로 |
+|------|------|
+| API 명세서 | [docs/API_SPEC.md](docs/API_SPEC.md) |
+| OpenVidu Webhook 가이드 | [docs/OPENVIDU_WEBHOOK_GUIDE.md](docs/OPENVIDU_WEBHOOK_GUIDE.md) |
+| OAuth 작동 방식 | [docs/오언서/조사_분석/OAuth작동방식/OAuth.md](docs/오언서/조사_분석/OAuth작동방식/OAuth.md) |
+| 실시간 통신 기술 조사 | [docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md](docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md) |
+| 하이라이트 저장 방식 검토 | [docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md](docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md) |
+| WebRTC 요약 | [docs/유준호/webrtcsummary.md](docs/유준호/webrtcsummary.md) |
+
+### AI
+
+| 문서 | 경로 |
+|------|------|
+| AI 프로젝트 구조 | [ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md](ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md) |
+| 30 Epochs Fine-tuning 실험 | [ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md](ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md) |
+| AI 포트폴리오 요약 | [ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md](ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md) |
+
+### 실행 및 상세 안내
+
+| 구분 | 안내 | 경로 |
+|------|------|------|
+| Frontend | 웹 클라이언트 실행 및 빌드 가이드 | [frontend/README.md](frontend/README.md) |
+| Backend | 백엔드 실행 및 환경 변수 가이드 | [backend/README.md](backend/README.md) |
+| Infra | 운영 인프라 구성 기준 | [infra/README.md](infra/README.md) |
+| Docker | 로컬/개발/운영 Compose 실행 | [DOCKER_GUIDE.md](DOCKER_GUIDE.md) |
+| Deploy | Blue/Green 배포 절차 | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
+| Jenkins | CI/CD 파이프라인 운영 | [JENKINS_GUIDE.md](JENKINS_GUIDE.md) |
 
 ---
 
@@ -349,41 +370,19 @@ make local-down
 
 ---
 
-## 문서 바로가기
-
-### Overview
-
-| 문서 | 경로 |
-|------|------|
-| Frontend README | [frontend/README.md](frontend/README.md) |
-| Backend README | [backend/README.md](backend/README.md) |
-| Infra README | [infra/README.md](infra/README.md) |
-| Docker Guide | [DOCKER_GUIDE.md](DOCKER_GUIDE.md) |
-| Deployment Guide | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
-
-### Architecture / API
-
-| 문서 | 경로 |
-|------|------|
-| API 명세서 | [docs/API_SPEC.md](docs/API_SPEC.md) |
-| OpenVidu Webhook 가이드 | [docs/OPENVIDU_WEBHOOK_GUIDE.md](docs/OPENVIDU_WEBHOOK_GUIDE.md) |
-| 실시간 통신 기술 조사 | [docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md](docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md) |
-| 하이라이트 저장 방식 검토 | [docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md](docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md) |
-
-### AI
-
-| 문서 | 경로 |
-|------|------|
-| AI 프로젝트 구조 | [ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md](ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md) |
-| 30 Epochs Fine-tuning 실험 | [ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md](ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md) |
-| AI 포트폴리오 요약 | [ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md](ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md) |
-
----
-
 ## 팀 소개 — 웃지마게임
 
 <table>
   <tr>
+    <td align="center" width="14%">
+      <strong>이재호</strong><br/>
+      <sub>팀장</sub><br/><br/>
+      <img src="https://img.shields.io/badge/PM-555555?style=flat-square" alt="PM" /><br/>
+      <img src="https://img.shields.io/badge/Frontend-2F80ED?style=flat-square&logo=react&logoColor=white" alt="Frontend" /><br/>
+      <img src="https://img.shields.io/badge/Docs-2F6F9F?style=flat-square&logo=markdown&logoColor=white" alt="Docs" /><br/>
+      <sub>기획/일정 관리</sub><br/>
+      <sub>문서·시연</sub>
+    </td>
     <td align="center" width="14%">
       <strong>김승철</strong><br/>
       <sub>팀원</sub><br/><br/>
@@ -413,33 +412,27 @@ make local-down
       <sub>팀원</sub><br/><br/>
       <img src="https://img.shields.io/badge/Backend-4C9A2A?style=flat-square&logo=springboot&logoColor=white" alt="Backend" /><br/>
       <img src="https://img.shields.io/badge/Report-EA580C?style=flat-square" alt="Report" /><br/>
+      <img src="https://img.shields.io/badge/Capture_Guard-111827?style=flat-square" alt="Capture Guard" /><br/>
       <sub>신고 API</sub><br/>
-      <sub>Google Sheets</sub>
+      <sub>캡처·포커스 감지</sub>
     </td>
     <td align="center" width="14%">
       <strong>유준호</strong><br/>
       <sub>팀원</sub><br/><br/>
       <img src="https://img.shields.io/badge/Backend-4C9A2A?style=flat-square&logo=springboot&logoColor=white" alt="Backend" /><br/>
       <img src="https://img.shields.io/badge/Infra-F59E0B?style=flat-square&logo=docker&logoColor=white" alt="Infra" /><br/>
+      <img src="https://img.shields.io/badge/Electron_Download-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron Download" /><br/>
       <sub>배포 자동화</sub><br/>
-      <sub>Monitoring</sub>
-    </td>
-    <td align="center" width="14%">
-      <strong>이재호</strong><br/>
-      <sub>팀장</sub><br/><br/>
-      <img src="https://img.shields.io/badge/PM-555555?style=flat-square" alt="PM" /><br/>
-      <img src="https://img.shields.io/badge/Frontend-2F80ED?style=flat-square&logo=react&logoColor=white" alt="Frontend" /><br/>
-      <img src="https://img.shields.io/badge/Docs-2F6F9F?style=flat-square&logo=markdown&logoColor=white" alt="Docs" /><br/>
-      <sub>기획/일정 관리</sub><br/>
-      <sub>문서·시연</sub>
+      <sub>Electron 배포 연결</sub>
     </td>
     <td align="center" width="14%">
       <strong>차경빈</strong><br/>
       <sub>팀원</sub><br/><br/>
       <img src="https://img.shields.io/badge/Backend-4C9A2A?style=flat-square&logo=springboot&logoColor=white" alt="Backend" /><br/>
       <img src="https://img.shields.io/badge/Match-2563EB?style=flat-square" alt="Match" /><br/>
+      <img src="https://img.shields.io/badge/Electron_Verify-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron Verify" /><br/>
       <sub>방/매칭 도메인</sub><br/>
-      <sub>STOMP</sub>
+      <sub>Electron 서명 검증</sub>
     </td>
   </tr>
 </table>
