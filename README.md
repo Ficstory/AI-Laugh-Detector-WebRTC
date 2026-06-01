@@ -308,53 +308,6 @@ Electron 앱 요청 -> X-Signature/X-Timestamp 전달 -> 서버 HMAC 검증 -> E
 
 ---
 
-## 실행 가이드
-
-### 사전 요구사항
-
-- Docker & Docker Compose
-- Node.js 18+
-- JDK 21
-- Python 3.10+ (AI 서버 또는 학습 실행 시)
-
-### 로컬 백엔드/데이터 스택 실행
-
-```bash
-make local-up
-```
-
-| 서비스 | URL |
-|--------|-----|
-| Backend API | http://localhost:8081 |
-| Swagger UI | http://localhost:8081/swagger-ui/index.html |
-| MySQL | localhost:3307 |
-| Redis | localhost:6380 |
-| MinIO Console | http://localhost:9001 |
-
-### 프론트엔드 실행
-
-```bash
-cd frontend
-npm install
-npm run local
-```
-
-### AI API 서버 실행
-
-```bash
-cd ai/smile-detection-ai
-pip install -r requirements.txt
-uvicorn api.main:app --reload
-```
-
-### 로컬 스택 중지
-
-```bash
-make local-down
-```
-
----
-
 ## 팀 소개 — 웃지마게임
 
 <table>
