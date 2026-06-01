@@ -218,7 +218,7 @@ Electron 앱 요청 -> X-Signature/X-Timestamp 전달 -> 서버 HMAC 검증 -> E
 | `backend/` | 인증, 사용자, 방 관리, 매칭, 게임 이벤트 처리, OpenVidu 토큰 발급, Electron 서명 검증, 신고 저장 | Java 21, Spring Boot, Spring Security, JPA, Redis, STOMP |
 | `ai/smile-detection-ai/` | 웃음 감지 모델 학습/파인튜닝, ONNX export, FastAPI 분석 서버, 실험 리포트 | PyTorch, MediaPipe, OpenCV, FastAPI, MLflow, ONNX |
 | `infra/` | Jenkins, Nginx, 데이터 서비스, 모니터링, 운영 네트워크 구성 | Docker Compose, Jenkins, Nginx, MySQL, Redis, MinIO, Grafana |
-| `docs/` | API 명세, 기술 조사, 의사결정 자료, 시연/회고 산출물 | API Spec, WebRTC 조사, 하이라이트 저장 방식 |
+| `docs/` | API 명세, 시스템 아키텍처, 시연 자료 | API Spec, Demo, Architecture |
 | `exec/` | 제출 및 포팅 산출물 | Porting, Deployment |
 
 ---
@@ -282,33 +282,18 @@ Electron 앱 요청 -> X-Signature/X-Timestamp 전달 -> 서버 HMAC 검증 -> E
 | Deployment Guide | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
 | Porting Manual | [exec/PORTING_MANUAL.md](exec/PORTING_MANUAL.md) |
 
-### Service / 기획
-
-| 문서 | 경로 |
-|------|------|
-| 팀장 기획 산출물 | [docs/이재호/readme.md](docs/이재호/readme.md) |
-| FE 기술 명세서 | [docs/김승철/FE_기술명세서.md](docs/김승철/FE_기술명세서.md) |
-| 배틀 화면 FE 기술 명세서 | [docs/박세홍/FE_기술명세서.md](docs/박세홍/FE_기술명세서.md) |
-| 시장 조사 | [docs/오언서/조사_분석/시장조사/시장조사.md](docs/오언서/조사_분석/시장조사/시장조사.md) |
-
 ### Architecture / API
 
 | 문서 | 경로 |
 |------|------|
 | API 명세서 | [docs/API_SPEC.md](docs/API_SPEC.md) |
 | OpenVidu Webhook 가이드 | [docs/OPENVIDU_WEBHOOK_GUIDE.md](docs/OPENVIDU_WEBHOOK_GUIDE.md) |
-| OAuth 작동 방식 | [docs/오언서/조사_분석/OAuth작동방식/OAuth.md](docs/오언서/조사_분석/OAuth작동방식/OAuth.md) |
-| 실시간 통신 기술 조사 | [docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md](docs/오언서/조사_분석/실시간통신기술조사/실시간통신기술.md) |
-| 하이라이트 저장 방식 검토 | [docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md](docs/오언서/기술_구현/하이라이트저장방식/하이라이트저장방식.md) |
-| WebRTC 요약 | [docs/유준호/webrtcsummary.md](docs/유준호/webrtcsummary.md) |
 
 ### AI
 
 | 문서 | 경로 |
 |------|------|
 | AI 프로젝트 구조 | [ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md](ai/smile-detection-ai/docs/PROJECT_STRUCTURE.md) |
-| 30 Epochs Fine-tuning 실험 | [ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md](ai/smile-detection-ai/docs/finetuning_experiments/experiment_02_30epochs/README.md) |
-| AI 포트폴리오 요약 | [ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md](ai/smile-detection-ai/docs/PORTFOLIO_양한빈.md) |
 
 ### 실행 및 상세 안내
 
